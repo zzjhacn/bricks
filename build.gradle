@@ -1,0 +1,107 @@
+allprojects {
+  apply plugin: 'java'
+  /*apply plugin: 'eclipse'*/
+  /*apply plugin: 'maven'*/
+
+  sourceCompatibility = 1.8
+  targetCompatibility = 1.8
+  version = '1.0.00-SNAPSHOT'
+}
+group = 'com.bricks'
+/*configure(subprojects.findAll {it.name.contains('war')}) {*/
+configure(subprojects.findAll {}) {
+  group = 'com.bricks.'+it.parent.name
+}
+
+buildscript {
+  repositories {
+    /*maven中央仓库*/
+    mavenCentral()
+
+    /*maven本地仓库*/
+    mavenLocal()
+
+    jcenter()
+
+    /*maven {
+      url "https://plugins.gradle.org/m2/"
+      // url "local/path/to/mvn-repo"
+      // Look for POMs and artifacts, such as JARs, here
+      // url "http://repository.jboss.org/maven2/"
+      // Look for artifacts here if not found at the above location
+      // artifactUrls "http://repo.mycompany.com/jars"
+      // artifactUrls "http://repo.mycompany.com/jars2"
+    }*/
+  }
+  dependencies {
+    classpath 'io.spring.gradle:dependency-management-plugin:0.5.6.RELEASE'
+  }
+}
+
+subprojects {
+  repositories {
+    mavenCentral()
+    mavenLocal()
+    jcenter()
+  }
+
+  apply plugin: 'io.spring.dependency-management'
+
+  dependencyManagement {
+      imports {
+          mavenBom 'io.spring.platform:platform-bom:2.0.3.RELEASE'
+      }
+  }
+
+  jar {
+    manifest.attributes provider: 'gradle'
+    /*manifest {
+      attributes 'Main-Class': 'net.petrikainulainen.gradle.HelloWorld'
+    }*/
+  }
+
+  dependencies {
+      compile 'ch.qos.logback:logback-classic:1.1.3',
+        'ch.qos.logback:logback-core:1.1.3',
+        'org.aspectj:aspectjrt',
+        'org.aspectj:aspectjtools',
+        'org.springframework:spring-core'
+
+      testCompile 'junit:junit:4.11',
+        'org.springframework:spring-test',
+        'org.jmock:jmock-junit4:2.8.1',
+        'org.apache.tomcat.embed:tomcat-embed-core',
+        'org.apache.tomcat:tomcat-dbcp',
+        'org.apache.tomcat.embed:tomcat-embed-jasper'
+  }
+
+  /*
+  task copyLicense(type: Copy) {
+      from "LICENSE"
+      into "$buildDir"
+  }
+  */
+}
+project(':bricks-utils'){
+  dependencies {
+    compile project(":bricks-lang")
+  }
+}
+project(':bricks-core'){
+  dependencies {
+    compile project(":bricks-lang")
+    compile project(":bricks-utils")
+  }
+}
+project(':bricks-helper'){
+  dependencies {
+    compile project(":bricks-lang")
+    compile project(":bricks-core")
+  }
+}
+project(':bricks-facade'){
+  apply plugin: 'war'
+  dependencies {
+    compile project(":bricks-core")
+  }
+}

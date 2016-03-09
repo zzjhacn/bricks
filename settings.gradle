@@ -1,0 +1,2 @@
+rootProject.name = 'bricks'
+include 'bricks-lang', 'bricks-core', 'bricks-utils', 'bricks-helper', 'bricks-facade', 'bricks-dal:bricks-dal-common', 'bricks-dal:bricks-dal-mybatis'
