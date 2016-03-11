@@ -15,34 +15,37 @@ configure(subprojects.findAll {}) {
 
 buildscript {
   repositories {
-    /*maven中央仓库*/
     mavenCentral()
-
-    /*maven本地仓库*/
-    mavenLocal()
-
+    /*mavenLocal()*/
     jcenter()
 
-    /*maven {
-      url "https://plugins.gradle.org/m2/"
-      // url "local/path/to/mvn-repo"
+    maven {
+      /*url "http://nexus.shengpaydev.com/content/groups/public"*/
+      url "D:/repo/"
       // Look for POMs and artifacts, such as JARs, here
       // url "http://repository.jboss.org/maven2/"
       // Look for artifacts here if not found at the above location
       // artifactUrls "http://repo.mycompany.com/jars"
       // artifactUrls "http://repo.mycompany.com/jars2"
-    }*/
+    }
   }
   dependencies {
     classpath 'io.spring.gradle:dependency-management-plugin:0.5.6.RELEASE'
+    classpath 'org.akhikhl.gretty:gretty:+'
   }
 }
 
 subprojects {
+  [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
   repositories {
     mavenCentral()
-    mavenLocal()
-    jcenter()
+    /*mavenLocal()*/
+    /*jcenter()*/
+
+	maven {
+	  /*url "http://nexus.shengpaydev.com/content/groups/public"*/
+    url "D:/repo/"
+    }
   }
 
   apply plugin: 'io.spring.dependency-management'
@@ -70,9 +73,10 @@ subprojects {
       testCompile 'junit:junit:4.11',
         'org.springframework:spring-test',
         'org.jmock:jmock-junit4:2.8.1',
-        'org.apache.tomcat.embed:tomcat-embed-core',
+        'commons-logging:commons-logging:1.2'
+        /*'org.apache.tomcat.embed:tomcat-embed-core',
         'org.apache.tomcat:tomcat-dbcp',
-        'org.apache.tomcat.embed:tomcat-embed-jasper'
+        'org.apache.tomcat.embed:tomcat-embed-jasper'*/
   }
 
   /*
@@ -97,11 +101,23 @@ project(':bricks-helper'){
   dependencies {
     compile project(":bricks-lang")
     compile project(":bricks-core")
+	compile 'org.apache.velocity:velocity',
+		'org.apache.velocity:velocity-tools'
   }
 }
 project(':bricks-facade'){
+  ext{
+    ver_thymeleaf = "2.1.4.RELEASE"
+  }
   apply plugin: 'war'
+  /*apply from: 'https://raw.github.com/akhikhl/gretty/master/pluginScripts/gretty.plugin'*/
+  apply plugin: 'org.akhikhl.gretty'
   dependencies {
     compile project(":bricks-core")
+	  compile "org.thymeleaf:thymeleaf:$ver_thymeleaf",
+  		"org.thymeleaf:thymeleaf-spring4:$ver_thymeleaf",
+  		"org.springframework:spring-webmvc",
+  		"org.hsqldb:hsqldb:2.3.3",
+      "com.alibaba:druid:1.0.17"
   }
 }
