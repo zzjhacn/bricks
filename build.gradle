@@ -87,8 +87,30 @@ project(':bricks-utils'){
 }
 project(':bricks-core'){
   dependencies {
-    compile project(":bricks-lang")
-    compile project(":bricks-utils")
+    compile project(":bricks-lang"),
+      project(":bricks-utils")
+  }
+}
+project(':bricks-dal:bricks-dal-common'){
+  dependencies {
+    compile project(":bricks-lang"),
+      project(":bricks-utils"),
+      project(":bricks-core")
+  }
+}
+project(':bricks-dal:bricks-dal-mybatis'){
+  dependencies {
+    compile project(":bricks-lang"),
+      project(":bricks-utils"),
+      project(":bricks-core"),
+      project(":bricks-dal:bricks-dal-common"),
+      'org.mybatis:mybatis:3.3.1',
+      'org.mybatis:mybatis-spring:1.2.4',
+      'org.springframework:spring-tx',
+      //'org.springframework:spring-jdbc',
+      'org.springframework:spring-orm',
+      'commons-dbcp:commons-dbcp:1.4',
+      'javax.persistence:persistence-api:1.0'
   }
 }
 project(':bricks-helper'){
@@ -106,17 +128,14 @@ project(':bricks-facade'){
   apply plugin: 'org.akhikhl.gretty'
   dependencies {
     compile project(":bricks-core"),
-	  project(":bricks-helper"),
+      project(":bricks-helper"),
+      project(":bricks-dal:bricks-dal-mybatis"),
       "org.thymeleaf:thymeleaf:$version_thymeleaf",
       "org.thymeleaf:thymeleaf-spring4:$version_thymeleaf",
       'org.springframework:spring-webmvc',
       'org.springframework:spring-web',
-      'org.springframework:spring-tx',
-      'org.springframework:spring-jdbc',
       'com.alibaba:druid:1.0.17',
       'org.apache.derby:derby:10.12.1.1',
-      'org.mybatis:mybatis:3.3.1',
-      'org.mybatis:mybatis-spring:1.2.4',
       'commons-logging:commons-logging:1.2',
       'javax.servlet:javax.servlet-api:3.1.0',
       'javax.servlet.jsp:jsp-api:2.2.1-b03'

@@ -284,19 +284,19 @@
                 <div class="widget">
                   <div class="widget-header">
                     <div class="title">
-                      已经添加的模型1
+                      已经添加的模型
                     </div>
                     <a href="#" data-toggle="modal" data-target="#modelDetail">
-                    <span class="tools">
-                      <i class="fa fa-cogs"></i>
-                    </span>
+                      <span class="tools">
+                        <i class="fa fa-cogs"></i>
+                      </span>
                     </a>
                     <div class="modal fade" id="modelDetail" tabindex="-1" role="dialog" aria-labelledby="modelDetail2" aria-hidden="true">
                       <div class="modal-dialog">
                         <div class="modal-content">
                           <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h4 class="modal-title text-danger" id="modelDetail2">新增模型1</h4>
+                            <h4 class="modal-title text-danger" id="modelDetail2">新增模型</h4>
                           </div>
                           <div class="modal-body">
                             <div class="widget-body">
@@ -353,16 +353,16 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
+                        <tr th:each="p,pStat:${allProjs}">
                           <td>
                             <input type="checkbox" class="no-margin" />
                           </td>
-                          <td>
+                          <td th:text="${p.projName}">
                             <span class="name">
                               Mahendra Singh Dhoni
                             </span>
                           </td>
-                          <td>
+                          <td th:text="${p.projName}">
                             Baswa #567
                           </td>
                           <td>

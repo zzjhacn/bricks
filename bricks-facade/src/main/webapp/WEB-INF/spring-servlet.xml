@@ -78,7 +78,7 @@
 	</bean>
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
-		<property name="mapperLocations" value="classpath*:/cn/codingwoo/codehelper/proj/dao/**/*Mapper.xml" />
+		<property name="mapperLocations" value="classpath*:/com/bricks/facade/dao/**/*Mapper.xml" />
 		<property name="failFast" value="true" />
 	</bean>
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" p:dataSource-ref="dataSource" />
