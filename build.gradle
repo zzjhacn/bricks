@@ -8,6 +8,7 @@ allprojects {
   version = '1.0.00-SNAPSHOT'
 }
 group = 'com.bricks'
+[compileJava,compileTestJava,javadoc]*.options*.encoding = "UTF-8"
 /*configure(subprojects.findAll {it.name.contains('war')}) {*/
 configure(subprojects.findAll {}) {
   group = 'com.bricks.'+it.parent.name
@@ -16,18 +17,18 @@ configure(subprojects.findAll {}) {
 buildscript {
   repositories {
     mavenCentral()
-    /*mavenLocal()*/
+    mavenLocal()
     jcenter()
 
-    maven {
-      /*url "http://nexus.shengpaydev.com/content/groups/public"*/
-      url "D:/repo/"
+    /*maven {
+      url "https://plugins.gradle.org/m2/"
+      // url "local/path/to/mvn-repo"
       // Look for POMs and artifacts, such as JARs, here
       // url "http://repository.jboss.org/maven2/"
       // Look for artifacts here if not found at the above location
       // artifactUrls "http://repo.mycompany.com/jars"
       // artifactUrls "http://repo.mycompany.com/jars2"
-    }
+    }*/
   }
   dependencies {
     classpath 'io.spring.gradle:dependency-management-plugin:0.5.6.RELEASE'
@@ -36,16 +37,10 @@ buildscript {
 }
 
 subprojects {
-  [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
   repositories {
     mavenCentral()
-    /*mavenLocal()*/
-    /*jcenter()*/
-
-	maven {
-	  /*url "http://nexus.shengpaydev.com/content/groups/public"*/
-    url "D:/repo/"
-    }
+    mavenLocal()
+    jcenter()
   }
 
   apply plugin: 'io.spring.dependency-management'
@@ -72,11 +67,10 @@ subprojects {
 
       testCompile 'junit:junit:4.11',
         'org.springframework:spring-test',
-        'org.jmock:jmock-junit4:2.8.1',
-        'commons-logging:commons-logging:1.2'
-        /*'org.apache.tomcat.embed:tomcat-embed-core',
-        'org.apache.tomcat:tomcat-dbcp',
-        'org.apache.tomcat.embed:tomcat-embed-jasper'*/
+        //'org.apache.tomcat.embed:tomcat-embed-core',
+        //'org.apache.tomcat:tomcat-dbcp',
+        //'org.apache.tomcat.embed:tomcat-embed-jasper',
+        'org.jmock:jmock-junit4:2.8.1'
   }
 
   /*
@@ -99,25 +93,32 @@ project(':bricks-core'){
 }
 project(':bricks-helper'){
   dependencies {
-    compile project(":bricks-lang")
-    compile project(":bricks-core")
-	compile 'org.apache.velocity:velocity',
-		'org.apache.velocity:velocity-tools'
+    compile project(":bricks-lang"),
+      project(":bricks-core"),
+	  "org.apache.velocity:velocity:1.7"
   }
 }
 project(':bricks-facade'){
   ext{
-    ver_thymeleaf = "2.1.4.RELEASE"
+    version_thymeleaf = '2.1.4.RELEASE'//3.0.0.BETA02
   }
   apply plugin: 'war'
-  /*apply from: 'https://raw.github.com/akhikhl/gretty/master/pluginScripts/gretty.plugin'*/
   apply plugin: 'org.akhikhl.gretty'
   dependencies {
-    compile project(":bricks-core")
-	  compile "org.thymeleaf:thymeleaf:$ver_thymeleaf",
-  		"org.thymeleaf:thymeleaf-spring4:$ver_thymeleaf",
-  		"org.springframework:spring-webmvc",
-  		"org.hsqldb:hsqldb:2.3.3",
-      "com.alibaba:druid:1.0.17"
+    compile project(":bricks-core"),
+	  project(":bricks-helper"),
+      "org.thymeleaf:thymeleaf:$version_thymeleaf",
+      "org.thymeleaf:thymeleaf-spring4:$version_thymeleaf",
+      'org.springframework:spring-webmvc',
+      'org.springframework:spring-web',
+      'org.springframework:spring-tx',
+      'org.springframework:spring-jdbc',
+      'com.alibaba:druid:1.0.17',
+      'org.apache.derby:derby:10.12.1.1',
+      'org.mybatis:mybatis:3.3.1',
+      'org.mybatis:mybatis-spring:1.2.4',
+      'commons-logging:commons-logging:1.2',
+      'javax.servlet:javax.servlet-api:3.1.0',
+      'javax.servlet.jsp:jsp-api:2.2.1-b03'
   }
 }

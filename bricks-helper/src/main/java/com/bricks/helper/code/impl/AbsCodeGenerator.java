@@ -16,7 +16,6 @@ import com.bricks.helper.code.CodeGenerator;
  */
 public abstract class AbsCodeGenerator implements CodeGenerator {
 
-
 	protected void write(VelocityContext vc, String templatePath, String outputPath) {
 		FileWriter out = null;
 		InputStreamReader inputStreamReader = null;
