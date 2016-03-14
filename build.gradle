@@ -43,6 +43,12 @@ subprojects {
     jcenter()
   }
 
+  processResources{
+    /* 从'$projectDir/src/main/'目录下复制文件到'WEB-INF/classes'目录下覆盖原有同名文件*/
+    from("$projectDir/src/main/java/","$projectDir/src/main/resources/")
+    include '**/*.xml'
+  }
+  
   apply plugin: 'io.spring.dependency-management'
 
   dependencyManagement {
@@ -135,7 +141,9 @@ project(':bricks-facade'){
       'org.springframework:spring-webmvc',
       'org.springframework:spring-web',
       'com.alibaba:druid:1.0.17',
-      'org.apache.derby:derby:10.12.1.1',
+      /*'org.apache.derby:derby:10.12.1.1',*/
+      /*'org.apache.derby:derbyclient:10.12.1.1',*/
+      'org.hsqldb:hsqldb:2.3.3',
       'commons-logging:commons-logging:1.2',
       'javax.servlet:javax.servlet-api:3.1.0',
       'javax.servlet.jsp:jsp-api:2.2.1-b03'

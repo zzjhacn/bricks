@@ -49,6 +49,7 @@
 		<property name="prefix" value="/WEB-INF/view/" />
 		<property name="suffix" value=".html" />
 		<property name="templateMode" value="HTML5" />
+		<property name="characterEncoding" value="UTF-8"/>
     <!-- Template cache is true by default. Set to false if you want -->
     <!-- templates to be automatically updated when modified.        -->
 		<property name="cacheable" value="false" />
@@ -64,9 +65,9 @@
 	</bean>
 
 	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
-		<property name="url" value="jdbc:derby:../db/hsqldb/data" />
-		<property name="username" value="root" />
-		<property name="password" value="1234" />
+		<property name="url" value="jdbc:hsqldb:../db/hsqldb/data/data.dat" />
+		<property name="username" value="sa" />
+		<property name="password" value="" />
 		<!--
 		<property name="initialSize" value="${dao.initialSize}" />
 		<property name="minIdle" value="${dao.minIdle}" />

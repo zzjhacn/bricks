@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8" ?>  
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bricks.facade.dao.proj.ProjDAO">
+<mapper namespace="com.bricks.facade.dao.proj.ProjDao">
 	<resultMap type="com.bricks.facade.dao.proj.Proj" id="result"/>
     <sql id="select_all_cols">
     	t_proj.ID,
@@ -8,14 +8,14 @@
 		t_proj.proj_name as projName,
 		t_proj.CREATE_TIME as createTime,
 		t_proj.UPDATE_TIME as updateTime,
-		t_proj.VERSION 
+		t_proj.VERSION
     </sql>
     <sql id="insert_all_cols">
 		t_proj.proj_code,
 		t_proj.proj_name,
 		t_proj.CREATE_TIME,
 		t_proj.UPDATE_TIME,
-		t_proj.VERSION 
+		t_proj.VERSION
     </sql>
     <sql id="where_all">
 		WHERE 1=1
@@ -33,9 +33,9 @@
 		</if>
 		<if test="cond.ids != null">
 			and t_proj.id in
-			<foreach item="item" index="index" collection="cond.ids" open="(" separator="," close=")">  
-				#{item}  
- 			</foreach> 
+			<foreach item="item" index="index" collection="cond.ids" open="(" separator="," close=")">
+				#{item}
+ 			</foreach>
 		</if>
 		<if test="cond.createTimeB != null">
 		<![CDATA[
@@ -58,9 +58,9 @@
 		]]>
 		</if>
     </sql>
-	<select id="select" resultMap="result"> 
+	<select id="select" resultMap="result">
 		select <include refid="select_all_cols"/>
-		FROM t_proj 
+		FROM t_proj
 		WHERE t_proj.ID=#{id}
 		<if test="lock">
 		FOR UPDATE
@@ -68,7 +68,7 @@
 	</select>
 	<select id="query" resultMap="result">
 		select <include refid="select_all_cols"/>
-		FROM t_proj 
+		FROM t_proj
 		<include refid="where_all"/>
 		<if test="start != null">
 		order by t_proj.create_time desc
@@ -77,12 +77,12 @@
 	</select>
 	<select id="count" resultType="java.lang.Long">
 		select count(0)
-		FROM t_proj 
+		FROM t_proj
 		<include refid="where_all"/>
 	</select>
 	<select id="sum" resultType="java.math.BigDecimal">
 		select sum(${col})
-		FROM t_proj 
+		FROM t_proj
 		<include refid="where_all"/>
 	</select>
 	<insert id="insert" useGeneratedKeys="true" keyProperty="id" >

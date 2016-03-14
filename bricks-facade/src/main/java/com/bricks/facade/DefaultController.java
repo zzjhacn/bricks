@@ -22,12 +22,25 @@ public class DefaultController {
 
 	@ModelAttribute("allProjs")
 	public List<Proj> populateTypes() {
-		return dao.query(new Proj());
+		List<Proj> data = dao.query(new Proj());
+		if(data == null || data.isEmpty()){
+			initData();
+		}
+		return data;
 	}
 
 	@RequestMapping({ "/", "/index" })
 	public String showSeedstarters() {
 		return "tables";
+	}
+
+	private void initData(){
+		for(int i = 0; i < 25; i++){
+			Proj p = new Proj();
+			p.setProjCode("testCode" + i);
+			p.setProjName("test project name " + i);
+			dao.save(p);
+		}
 	}
 
 }
