@@ -7,7 +7,10 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
+import com.bricks.dal.Page;
+import com.bricks.dal.QueryResult;
 import com.bricks.facade.dao.proj.Proj;
 import com.bricks.facade.dao.proj.ProjDao;
 
@@ -20,18 +23,20 @@ public class DefaultController {
 	@Resource
 	private ProjDao dao;
 
-	@ModelAttribute("allProjs")
+	//@ModelAttribute("allProjs")
 	public List<Proj> populateTypes() {
 		List<Proj> data = dao.query(new Proj());
-		if(data == null || data.isEmpty()){
-			initData();
-		}
+		// if(data == null || data.size() < 10){
+		// 	initData();
+		// }
 		return data;
 	}
 
 	@RequestMapping({ "/", "/index" })
-	public String showSeedstarters() {
-		return "tables";
+	public ModelAndView showSeedstarters(final Integer currPage) {
+		int page = (currPage == null || currPage < 1) ? 1 : currPage;
+		QueryResult<Proj> data = dao.queryResult(new Proj(), page, Page.DEFAULT_PAGE_SIZE);
+		return new ModelAndView("tables").addObject("pages", new Page(1, data.getCount().intValue())).addObject("allProjs", data.getData());
 	}
 
 	private void initData(){

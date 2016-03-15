@@ -3,76 +3,79 @@
 <mapper namespace="com.bricks.facade.dao.proj.ProjDao">
 	<resultMap type="com.bricks.facade.dao.proj.Proj" id="result"/>
     <sql id="select_all_cols">
-    	t_proj.ID,
-		t_proj.proj_code as projCode,
-		t_proj.proj_name as projName,
-		t_proj.CREATE_TIME as createTime,
-		t_proj.UPDATE_TIME as updateTime,
-		t_proj.VERSION
+    	ID,
+		proj_code as projCode,
+		proj_name as projName,
+		CREATE_TIME as createTime,
+		UPDATE_TIME as updateTime,
+		VERSION
     </sql>
     <sql id="insert_all_cols">
-		t_proj.proj_code,
-		t_proj.proj_name,
-		t_proj.CREATE_TIME,
-		t_proj.UPDATE_TIME,
-		t_proj.VERSION
+		proj_code,
+		proj_name,
+		CREATE_TIME,
+		UPDATE_TIME,
+		VERSION
     </sql>
     <sql id="where_all">
 		WHERE 1=1
 		<if test="cond.id != null">
-			AND t_proj.id = #{cond.id}
+			AND id = #{cond.id}
 		</if>
 		<if test="cond.projCode != null">
-			AND t_proj.proj_code = #{cond.projCode}
+			AND proj_code = #{cond.projCode}
 		</if>
 		<if test="cond.projName != null">
-			AND t_proj.proj_name = #{cond.projName}
+			AND proj_name = #{cond.projName}
 		</if>
 		<if test="cond.version != null">
-			AND t_proj.version = #{cond.version}
+			AND version = #{cond.version}
 		</if>
 		<if test="cond.ids != null">
-			and t_proj.id in
+			and id in
 			<foreach item="item" index="index" collection="cond.ids" open="(" separator="," close=")">
 				#{item}
  			</foreach>
 		</if>
 		<if test="cond.createTimeB != null">
 		<![CDATA[
-			AND t_proj.create_time >= #{cond.createTimeB}
+			AND create_time >= #{cond.createTimeB}
 		]]>
 		</if>
 		<if test="cond.createTimeE != null">
 		<![CDATA[
-			AND t_proj.create_time <= #{cond.createTimeE}
+			AND create_time <= #{cond.createTimeE}
 		]]>
 		</if>
 		<if test="cond.updateTimeB != null">
 		<![CDATA[
-			AND t_proj.update_time >= #{cond.updateTimeB}
+			AND update_time >= #{cond.updateTimeB}
 		]]>
 		</if>
 		<if test="cond.updateTimeE != null">
 		<![CDATA[
-			AND t_proj.update_time <= #{cond.updateTimeE}
+			AND update_time <= #{cond.updateTimeE}
 		]]>
 		</if>
     </sql>
 	<select id="select" resultMap="result">
 		select <include refid="select_all_cols"/>
 		FROM t_proj
-		WHERE t_proj.ID=#{id}
+		WHERE ID=#{id}
 		<if test="lock">
 		FOR UPDATE
 		</if>
 	</select>
 	<select id="query" resultMap="result">
-		select <include refid="select_all_cols"/>
+		select
+		<if test="start != null">
+		limit #{start} #{size} 
+		</if>
+		<include refid="select_all_cols"/>
 		FROM t_proj
 		<include refid="where_all"/>
 		<if test="start != null">
-		order by t_proj.create_time desc
-		limit #{start},#{size}
+		order by create_time desc
 		</if>
 	</select>
 	<select id="count" resultType="java.lang.Long">
@@ -91,7 +94,7 @@
 				(
 					#{projCode},
 					#{projName},
-					current_timestamp(),current_timestamp(),1
+					current_timestamp,current_timestamp,1
 				)
 	</insert>
 	<insert id="batchInsert">
@@ -101,7 +104,7 @@
 				(
 					#{item.projCode},
 					#{item.projName},
-					current_timestamp(),current_timestamp(),1
+					current_timestamp,current_timestamp,1
 				)
 			</foreach>
 	</insert>
@@ -111,7 +114,7 @@
 				(#{id},
 					#{projCode},
 					#{projName},
-					current_timestamp(),current_timestamp(),1
+					current_timestamp,current_timestamp,1
 				)
 	</insert>
 	<insert id="batchInsertWithId">
@@ -121,7 +124,7 @@
 				(#{item.id},
 					#{item.projCode},
 					#{item.projName},
-					current_timestamp(),current_timestamp(),1
+					current_timestamp,current_timestamp,1
 				)
 			</foreach>
 	</insert>
@@ -132,15 +135,15 @@
 			proj_name = #{projName},
 			id = #{id},
 			version = version + 1,
-			update_time = current_timestamp()
+			update_time = current_timestamp
 		</set>
-		where t_proj.id = #{id} and t_proj.version = #{version}
+		where id = #{id} and version = #{version}
 	</update>
 	<delete id="delete">
 		delete from t_proj
 		<include refid="where_all"/>
 	</delete>
 	<delete id="deleteById">
-		delete from t_proj where t_proj.id = #{id}
+		delete from t_proj where id = #{id}
 	</delete>
 </mapper>
