@@ -14,17 +14,20 @@ public class Page extends BaseObject {
 
 	private int currentPage = 1;
 
+	private int currentSize = 0;
+
 	private int maxPage = 1;
 
-	public Page(final int currentPage, final int cnt){
-			this(currentPage, cnt, null);
+	public Page(final int currentPage, final int cnt, final int currSize){
+			this(currentPage, cnt, currSize, null);
 	}
 
-	public Page(final int currentPage, final int cnt, final Integer pageSize){
+	public Page(final int currentPage, final int cnt, final int currSize, final Integer pageSize){
 		this.currentPage = currentPage > 0 ? currentPage : 1;
 		this.pageSize = (pageSize == null || pageSize <= 0) ? DEFAULT_PAGE_SIZE : pageSize;
 		int count = cnt > 0 ? cnt : 1;
 		this.maxPage = count % this.pageSize == 0 ? cnt / this.pageSize : cnt / this.pageSize + 1;
+		this.currentSize = currSize;
 	}
 
 	/**
@@ -43,21 +46,37 @@ public class Page extends BaseObject {
 		this.pageSize = pageSize;
 	}
 
-	/**
-	* Returns value of currentPage
-	* @return
-	*/
-	public int getCurrentPage() {
-		return currentPage;
-	}
+		/**
+		* Returns value of currentPage
+		* @return
+		*/
+		public int getCurrentPage() {
+			return currentPage;
+		}
 
-	/**
-	* Sets new value of currentPage
-	* @param
-	*/
-	public void setCurrentPage(int currentPage) {
-		this.currentPage = currentPage;
-	}
+		/**
+		* Sets new value of currentPage
+		* @param
+		*/
+		public void setCurrentPage(int currentPage) {
+			this.currentPage = currentPage;
+		}
+
+		/**
+		* Returns value of currentSize
+		* @return
+		*/
+		public int getCurrentSize() {
+			return currentSize;
+		}
+
+		/**
+		* Sets new value of currentSize
+		* @param
+		*/
+		public void setCurrentSize(int currentSize) {
+			this.currentSize = currentSize;
+		}
 
 	/**
 	* Returns value of maxPage

@@ -45,47 +45,12 @@
                     <div class="title">
                       已经添加的模型
                     </div>
-                    <a href="#" data-toggle="modal" data-target="#modelDetail">
+                    <a href="#" data-toggle="modal" data-target="#modelDetail" data-mid="-1">
                       <span class="tools">
                         <i class="fa fa-cogs"></i>
                       </span>
                     </a>
-                    <div class="modal fade" id="modelDetail" tabindex="-1" role="dialog" aria-labelledby="modelDetail2" aria-hidden="true">
-                      <div class="modal-dialog">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h4 class="modal-title text-danger" id="modelDetail2">新增模型</h4>
-                          </div>
-                          <div class="modal-body">
-                            <div class="widget-body">
-                              <form class="form-horizontal no-margin">
-                                <div class="form-group">
-                                  <label for="userName" class="col-sm-2 control-label">Name</label>
-                                  <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="userName" placeholder="Name"></input>
-                                  </div>
-                                </div>
-                                <div class="form-group">
-                                  <label for="emailId" class="col-sm-2 control-label">Email Address</label>
-                                  <div class="col-sm-10">
-                                    <input type="email" class="form-control" id="emailId" placeholder="Email"></input>
-                                  </div>
-                                </div>
-                                <div class="form-group">
-                                  <div class="col-sm-offset-2 col-sm-10">
-                                    <button type="submit" class="btn btn-info">Create Account</button>
-                                  </div>
-                                </div>
-                              </form>
-                            </div>
-                          </div>
-                          <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                    <div th:include="detail :: proj"></div>
                   </div>
                   <div class="widget-body">
                     <div id="dt_example" class="example_alt_pagination">
@@ -93,19 +58,19 @@
                         <thead>
                           <tr>
                             <th style="width:5%">
-                              <input type="checkbox" class="no-margin" />
+                              <input type="checkbox" class="no-margin" />ID
                             </th>
-                            <th style="width:40%">
-                              Name
+                            <th style="width:20%">
+                              Projcet Code
                             </th>
-                            <th style="width:20%" class="hidden-xs">
-                              Product
+                            <th style="width:40%" class="hidden-xs">
+                              Projcet Name
                             </th>
                             <th style="width:10%" class="hidden-xs">
-                              Status
+                              Version
                             </th>
                             <th style="width:15%" class="hidden-xs">
-                              Date
+                              Create Date
                             </th>
                             <th style="width:10%" class="hidden-xs">
                               Actions
@@ -115,10 +80,10 @@
                         <tbody>
                           <tr th:each="p,pStat:${allProjs}">
                             <td>
-                              <input type="checkbox" class="no-margin" />
+                              <input type="checkbox" class="no-margin" /><span th:text="${p.id}"></span>
                             </td>
                             <td>
-                              <span class="name" th:text="${p.projName}">
+                              <span class="name" th:text="${p.projCode}">
                                 Mahendra Singh Dhoni
                               </span>
                             </td>
@@ -126,11 +91,11 @@
                               Baswa #567
                             </td>
                             <td>
-                              <span class="label label-info">
+                              <span class="label label-info" th:text="${p.version}">
                                 New
                               </span>
                             </td>
-                            <td>
+                            <td th:text="${#dates.format(p.createTime,'yyyy-MM-dd HH:mm:ss')}">
                               15 - 02 - 2013
                             </td>
                             <td class="hidden-xs">
@@ -141,7 +106,7 @@
                                 </button>
                                 <ul class="dropdown-menu pull-right">
                                   <li>
-                                    <a href="#" th:onclick="'detail(' + ${p.id} + ')'">Edit</a>
+                                    <a href="#" data-toggle="modal" data-target="#modelDetail"  th:attr="data-mid=${p.id}">Edit</a>
                                   </li>
                                   <li>
                                     <a href="#">Delete</a>
@@ -176,16 +141,16 @@
                         <thead>
                           <tr>
                             <th style="width:17%">
-                              Month
+                              Projcet Code
                             </th>
                             <th style="width:20%">
-                              Internet Explorer
+                              Project Name
                             </th>
                             <th style="width:16%">
-                              Firefox
+                              Create Time
                             </th>
                             <th style="width:16%" class="hidden-phone">
-                              Chrome
+                              Update Time
                             </th>
                             <th style="width:16%" class="hidden-phone">
                               Safari
@@ -420,21 +385,49 @@
         });
       });
 
-      //
-      function detail(id){
-        //$('#modelDetail').show();
-        //alert('here');
+      $('#projDetail').on('submit',function(){
         $.ajax({
           type:"post",
-          url:[[@{/detail}]],
+          url:[[@{/save}]],
           data:{
-              id:id
+            id:$('#id').val(),
+            projCode:$('#projCode').val(),
+            projName:$('#projName').val()
           },
-          success: function (data) {
-              alert(data);
+          success:function(data){
+            window.reload();
           }
         });
-      }
+        return false;
+      });
+
+      $('#modelDetail').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var mid = button.data('mid'); // Extract info from data-* attributes
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        var modal = $(this);
+        if( mid > -1){
+          modal.find('.modal-title').text('Edit message to ' + mid);
+          $.ajax({
+            type:"post",
+            url:[[@{/detail}]],
+            data:{
+                id:mid
+            },
+            success: function (data) {
+              modal.find('#id').val(data.detail.id);
+              modal.find('#projCode').val(data.detail.projCode);
+              modal.find('#projName').val(data.detail.projName);
+            }
+          });
+        }else{
+          modal.find('#id').val('');
+          modal.find('#projCode').val('');
+          modal.find('#projName').val('');
+          modal.find('.modal-title').text('New message to ' + mid);
+        }
+      })
 
     </script>
 
