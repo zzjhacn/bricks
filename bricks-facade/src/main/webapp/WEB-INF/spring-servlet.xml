@@ -64,6 +64,10 @@
 		<property name="characterEncoding" value="utf-8"/>
 	</bean>
 
+	<bean name="jsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView" />
+	<bean class="org.springframework.web.servlet.view.BeanNameViewResolver">
+		<property name="order" value="3" />
+	</bean>
 	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
 		<property name="url" value="jdbc:hsqldb:../db/hsqldb/data/data.dat" />
 		<property name="username" value="sa" />

@@ -48,7 +48,7 @@ subprojects {
     from("$projectDir/src/main/java/","$projectDir/src/main/resources/")
     include '**/*.xml'
   }
-  
+
   apply plugin: 'io.spring.dependency-management'
 
   dependencyManagement {
@@ -146,6 +146,8 @@ project(':bricks-facade'){
       'org.hsqldb:hsqldb:2.3.3',
       'commons-logging:commons-logging:1.2',
       'javax.servlet:javax.servlet-api:3.1.0',
-      'javax.servlet.jsp:jsp-api:2.2.1-b03'
+      'javax.servlet.jsp:jsp-api:2.2.1-b03',
+      'com.fasterxml.jackson.core:jackson-databind:2.5.3',
+      'com.thoughtworks.xstream:xstream:1.4.7'
   }
 }

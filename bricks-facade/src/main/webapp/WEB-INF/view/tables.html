@@ -117,8 +117,8 @@
                             <td>
                               <input type="checkbox" class="no-margin" />
                             </td>
-                            <td th:text="${p.projName}">
-                              <span class="name">
+                            <td>
+                              <span class="name" th:text="${p.projName}">
                                 Mahendra Singh Dhoni
                               </span>
                             </td>
@@ -141,7 +141,7 @@
                                 </button>
                                 <ul class="dropdown-menu pull-right">
                                   <li>
-                                    <a href="#">Edit</a>
+                                    <a href="#" th:onclick="'detail(' + ${p.id} + ')'">Edit</a>
                                   </li>
                                   <li>
                                     <a href="#">Delete</a>
@@ -389,7 +389,7 @@
     <!-- Custom JS -->
     <script src="js/menu.js" th:src="@{/js/menu.js}"></script>
 
-    <script type="text/javascript">
+    <script type="text/javascript" th:inline="javascript">
       //ScrollUp
       $(function () {
         $.scrollUp({
@@ -419,6 +419,22 @@
           "sPaginationType": "full_numbers"
         });
       });
+
+      //
+      function detail(id){
+        //$('#modelDetail').show();
+        //alert('here');
+        $.ajax({
+          type:"post",
+          url:[[@{/detail}]],
+          data:{
+              id:id
+          },
+          success: function (data) {
+              alert(data);
+          }
+        });
+      }
 
     </script>
 

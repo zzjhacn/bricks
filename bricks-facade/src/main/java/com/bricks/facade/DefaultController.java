@@ -39,6 +39,14 @@ public class DefaultController {
 		return new ModelAndView("tables").addObject("pages", new Page(1, data.getCount().intValue())).addObject("allProjs", data.getData());
 	}
 
+	@RequestMapping({ "/detail" })
+	public ModelAndView showSeedstarters(final Long id) {
+		if(id == null){
+			return new ModelAndView("jsonView").addObject("msg", "fail");
+		}
+		return new ModelAndView("jsonView").addObject("detail", dao.select(id));
+	}
+
 	private void initData(){
 		for(int i = 0; i < 25; i++){
 			Proj p = new Proj();
