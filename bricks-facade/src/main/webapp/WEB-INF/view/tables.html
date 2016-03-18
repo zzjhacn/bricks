@@ -1,20 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
   <head>
-    <title>Blue Moon - Responsive Admin Dashboard</title>
+    <title>Bricks</title>
+
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta name="description" content="Blue Moon - Responsive Admin Dashboard" />
-    <meta name="keywords" content="Notifications, Admin, Dashboard, Bootstrap3, Sass, transform, CSS3, HTML5, Web design, UI Design, Responsive Dashboard, Responsive Admin, Admin Theme, Best Admin UI, Bootstrap Theme, Wrapbootstrap, Bootstrap, bootstrap.gallery" />
-    <meta name="author" content="Bootstrap Gallery" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="bricks" />
+    <meta name="keywords" content="bricks code-gen" />
+    <meta name="author" content="Gray" />
+
     <link rel="shortcut icon" href="img/favicon.ico" th:href="@{/img/favicon.ico}"/>
-
     <link href="css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
-
     <link href="css/new.css" th:href="@{/css/new.css}" rel="stylesheet"/>
-    <!-- Important. For Theming change primary-color variable in main.css  -->
-
     <link href="fonts/font-awesome.min.css" th:href="@{/fonts/font-awesome.min.css}" rel="stylesheet"/>
 
     <!-- HTML5 shiv and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -43,7 +41,7 @@
                 <div class="widget">
                   <div class="widget-header">
                     <div class="title">
-                      已经添加的模型
+                      已经添加的项目
                     </div>
                     <a href="#" data-toggle="modal" data-target="#modelDetail" data-mid="-1">
                       <span class="tools">
@@ -63,16 +61,19 @@
                             <th style="width:20%">
                               Projcet Code
                             </th>
-                            <th style="width:40%" class="hidden-xs">
+                            <th style="width:35%" class="hidden-xs">
                               Projcet Name
                             </th>
-                            <th style="width:10%" class="hidden-xs">
+                            <th style="width:5%" class="hidden-xs">
                               Version
                             </th>
                             <th style="width:15%" class="hidden-xs">
                               Create Date
                             </th>
-                            <th style="width:10%" class="hidden-xs">
+                            <th style="width:15%" class="hidden-xs">
+                              Update Date
+                            </th>
+                            <th style="width:5%" class="hidden-xs">
                               Actions
                             </th>
                           </tr>
@@ -80,23 +81,26 @@
                         <tbody>
                           <tr th:each="p,pStat:${allProjs}">
                             <td>
-                              <input type="checkbox" class="no-margin" /><span th:text="${p.id}"></span>
+                              <input type="checkbox" class="no-margin" /><input type="hidden" th:id="'id-'+${p.id}" th:value="${p.id}"></input>
                             </td>
                             <td>
                               <span class="name" th:text="${p.projCode}">
-                                Mahendra Singh Dhoni
+                                Project Code
                               </span>
                             </td>
                             <td th:text="${p.projName}">
-                              Baswa #567
+                              Project Name
                             </td>
                             <td>
                               <span class="label label-info" th:text="${p.version}">
-                                New
+                                0
                               </span>
                             </td>
                             <td th:text="${#dates.format(p.createTime,'yyyy-MM-dd HH:mm:ss')}">
-                              15 - 02 - 2013
+                              2016-03-18 12:12:12
+                            </td>
+                            <td th:text="${#dates.format(p.updateTime,'yyyy-MM-dd HH:mm:ss')}">
+                              2016-03-18 12:12:12
                             </td>
                             <td class="hidden-xs">
                               <div class="btn-group">
@@ -109,7 +113,10 @@
                                     <a href="#" data-toggle="modal" data-target="#modelDetail"  th:attr="data-mid=${p.id}">Edit</a>
                                   </li>
                                   <li>
-                                    <a href="#">Delete</a>
+                                    <a href="#" th:onclick="'del(' + ${p.id} + ')'">Delete</a>
+                                  </li>
+                                  <li>
+                                    <a href="#" data-toggle="modal" data-target="#modelDetail"  th:attr="data-mid=${p.id}">Add Table</a>
                                   </li>
                                 </ul>
                               </div>
@@ -131,7 +138,7 @@
                 <div class="widget">
                   <div class="widget-header">
                     <div class="title">
-                      Dynamic Table<a id="dynamic-tables">s</a>
+                      Table<a id="dynamic-tables">s</a>
                     </div>
                   </div>
                   <div class="widget-body">
@@ -198,7 +205,7 @@
                 <div class="widget">
                   <div class="widget-header">
                     <div class="title">
-                      Table Bordered
+                      Members
                     </div>
                   </div>
                   <div class="widget-body">
@@ -349,7 +356,7 @@
     <script src="js/jquery.js" th:src="@{/js/jquery.js}"></script>
     <script src="js/bootstrap.min.js" th:src="@{/js/bootstrap.min.js}"></script>
     <script src="js/jquery.scrollUp.js" th:src="@{/js/jquery.scrollUp.js}"></script>
-    <script src="js/jquery.dataTables.js" th:src="@{/js/jquery.dataTables.js}"></script>
+    <script src="js/jquery.datatables.js" th:src="@{/js/jquery.datatables.js}"></script>
 
     <!-- Custom JS -->
     <script src="js/menu.js" th:src="@{/js/menu.js}"></script>
@@ -385,27 +392,40 @@
         });
       });
 
+      var del = function (id){
+        $.ajax({
+          type:"post",
+          url:[[@{/delete}]],
+          data:{
+            id:id
+          },
+          success:function(data){
+            location.reload();
+          }
+        });
+        return false;
+      };
+
       $('#projDetail').on('submit',function(){
         $.ajax({
           type:"post",
           url:[[@{/save}]],
           data:{
             id:$('#id').val(),
+            version:$('#version').val(),
             projCode:$('#projCode').val(),
             projName:$('#projName').val()
           },
           success:function(data){
-            window.reload();
+            location.reload();
           }
         });
         return false;
       });
 
       $('#modelDetail').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget); // Button that triggered the modal
-        var mid = button.data('mid'); // Extract info from data-* attributes
-        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        var button = $(event.relatedTarget);
+        var mid = button.data('mid');
         var modal = $(this);
         if( mid > -1){
           modal.find('.modal-title').text('Edit message to ' + mid);
@@ -417,12 +437,14 @@
             },
             success: function (data) {
               modal.find('#id').val(data.detail.id);
+              modal.find('#version').val(data.detail.version);
               modal.find('#projCode').val(data.detail.projCode);
               modal.find('#projName').val(data.detail.projName);
             }
           });
         }else{
           modal.find('#id').val('');
+          modal.find('#version').val('');
           modal.find('#projCode').val('');
           modal.find('#projName').val('');
           modal.find('.modal-title').text('New message to ' + mid);

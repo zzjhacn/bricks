@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="${pkg}.Abs${table.className}Dao">
+	<resultMap type="${pkg}.${table.className}" id="result"/>
+    <sql id="select_all_cols">
+#set($p=".")
+#set($d="$")
+    	${table.fullName}.ID,
+#foreach( ${col} in ${table.cols} )
+		${table.fullName}.${col.colName} as ${col.fieldName},
+#end
+		${table.fullName}.CREATE_TIME as createTime,
+		${table.fullName}.UPDATE_TIME as updateTime,
+		${table.fullName}.VERSION 
+    </sql>
+    <sql id="insert_all_cols">
+#foreach( ${col} in ${table.cols} )
+		${table.fullName}.${col.colName},
+#end
+		${table.fullName}.CREATE_TIME,
+		${table.fullName}.UPDATE_TIME,
+		${table.fullName}.VERSION 
+    </sql>
+    <sql id="where_all">
+		WHERE 1=1
+		<if test="cond.id != null">
+			AND ${table.fullName}.id = #{cond.id}
+		</if>
+#foreach( ${col} in ${table.cols} )
+		<if test="cond.${col.fieldName} != null">
+			AND ${table.fullName}.${col.colName} = #{cond${p}${col.fieldName}}
+		</if>
+#if( ${col.needInCond} )
+		<if test="cond.${col.fieldName}s != null">
+			AND ${table.fullName}.${col.colName} in 
+			<foreach item="item" index="index" collection="cond${p}${col.fieldName}s" open="(" separator="," close=")">  
+				#{item}  
+ 			</foreach> 
+		</if>
+#end	
+#end	
+		<if test="cond.version != null">
+			AND ${table.fullName}.version = #{cond.version}
+		</if>
+		<if test="cond.ids != null">
+			and ${table.fullName}.id in
+			<foreach item="item" index="index" collection="cond.ids" open="(" separator="," close=")">  
+				#{item}  
+ 			</foreach> 
+		</if>
+		<if test="cond.createTimeB != null">
+		<![CDATA[
+			AND ${table.fullName}.create_time >= #{cond.createTimeB}
+		]]>
+		</if>
+		<if test="cond.createTimeE != null">
+		<![CDATA[
+			AND ${table.fullName}.create_time <= #{cond.createTimeE}
+		]]>
+		</if>
+		<if test="cond.updateTimeB != null">
+		<![CDATA[
+			AND ${table.fullName}.update_time >= #{cond.updateTimeB}
+		]]>
+		</if>
+		<if test="cond.updateTimeE != null">
+		<![CDATA[
+			AND ${table.fullName}.update_time <= #{cond.updateTimeE}
+		]]>
+		</if>
+    </sql>
+	<select id="select" resultMap="result"> 
+		select <include refid="select_all_cols"/>
+		FROM ${table.fullName} 
+		WHERE ${table.fullName}.ID=#{id}
+		<if test="lock">
+		FOR UPDATE
+		</if>
+	</select>
+	<select id="query" resultMap="result">
+		select <include refid="select_all_cols"/>
+		FROM ${table.fullName} 
+		<include refid="where_all"/>
+		<if test="start != null">
+		order by ${table.fullName}.create_time desc
+		limit #{start},#{size}
+		</if>
+	</select>
+	<select id="count" resultType="java.lang.Long">
+		select count(0)
+		FROM ${table.fullName} 
+		<include refid="where_all"/>
+	</select>
+	<select id="sum" resultType="java.math.BigDecimal">
+		select sum(${col})
+		FROM ${table.fullName} 
+		<include refid="where_all"/>
+	</select>
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" >
+		INSERT INTO ${table.fullName}(<include refid="insert_all_cols"/>)
+			VALUES
+				(
+#foreach( ${col} in ${table.cols} )
+					#{${col.fieldName}},
+#end
+					current_timestamp(),current_timestamp(),1
+				)
+	</insert>
+	<insert id="batchInsert">
+		INSERT INTO ${table.fullName}(<include refid="insert_all_cols"/>)
+			VALUES
+			<foreach item="item" index="index" collection="list" open="" separator="," close="">
+				(
+#foreach( ${col} in ${table.cols} )
+					#{item.${col.fieldName}},
+#end
+					current_timestamp(),current_timestamp(),1
+				)
+			</foreach>
+	</insert>
+	<insert id="insertWithId">
+		INSERT INTO ${table.fullName}(ID,<include refid="insert_all_cols"/>)
+			VALUES
+				(#{id},
+#foreach( ${col} in ${table.cols} )
+					#{${col.fieldName}},
+#end
+					current_timestamp(),current_timestamp(),1
+				)
+	</insert>
+	<insert id="batchInsertWithId">
+		INSERT INTO ${table.fullName}(ID,<include refid="insert_all_cols"/>)
+			VALUES
+			<foreach item="item" index="index" collection="list" open="" separator="," close="">
+				(#{item.id},
+#foreach( ${col} in ${table.cols} )
+					#{item.${col.fieldName}},
+#end
+					current_timestamp(),current_timestamp(),1
+				)
+			</foreach>
+	</insert>
+	<update id="update">
+		update ${table.fullName}
+		<set>
+#foreach( ${col} in ${table.cols} )
+			${col.colName} = #{${col.fieldName}},
+#end
+			id = #{id},
+			version = version + 1,
+			update_time = current_timestamp()
+		</set>
+		where ${table.fullName}.id = #{id} and ${table.fullName}.version = #{version}
+	</update>
+	<delete id="delete">
+		delete from ${table.fullName}
+		<include refid="where_all"/>
+	</delete>
+	<delete id="deleteById">
+		delete from ${table.fullName} where ${table.fullName}.id = #{id}
+	</delete>
+</mapper>

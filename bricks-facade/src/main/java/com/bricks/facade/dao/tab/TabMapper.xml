@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bricks.facade.dao.proj.ProjDao">
-	<resultMap type="com.bricks.facade.dao.proj.Proj" id="result"/>
+<mapper namespace="com.bricks.facade.dao.tab.TabDao">
+	<resultMap type="com.bricks.facade.dao.tab.Tab" id="result"/>
     <sql id="select_all_cols">
     	ID,
 		proj_code as projCode,
@@ -60,7 +60,7 @@
     </sql>
 	<select id="select" resultMap="result">
 		select <include refid="select_all_cols"/>
-		FROM t_proj
+		FROM t_tab
 		WHERE ID=#{id}
 		<if test="lock">
 		FOR UPDATE
@@ -72,7 +72,7 @@
 		limit #{start} #{size}
 		</if>
 		<include refid="select_all_cols"/>
-		FROM t_proj
+		FROM t_tab
 		<include refid="where_all"/>
 		<if test="start != null">
 		order by create_time desc
@@ -80,16 +80,16 @@
 	</select>
 	<select id="count" resultType="java.lang.Long">
 		select count(0)
-		FROM t_proj
+		FROM t_tab
 		<include refid="where_all"/>
 	</select>
 	<select id="sum" resultType="java.math.BigDecimal">
 		select sum(${col})
-		FROM t_proj
+		FROM t_tab
 		<include refid="where_all"/>
 	</select>
 	<insert id="insert" useGeneratedKeys="true" keyProperty="id" >
-		INSERT INTO t_proj(<include refid="insert_all_cols"/>)
+		INSERT INTO t_tab(<include refid="insert_all_cols"/>)
 			VALUES
 				(
 					#{projCode},
@@ -98,7 +98,7 @@
 				)
 	</insert>
 	<insert id="batchInsert">
-		INSERT INTO t_proj(<include refid="insert_all_cols"/>)
+		INSERT INTO t_tab(<include refid="insert_all_cols"/>)
 			VALUES
 			<foreach item="item" index="index" collection="list" open="" separator="," close="">
 				(
@@ -109,7 +109,7 @@
 			</foreach>
 	</insert>
 	<insert id="insertWithId">
-		INSERT INTO t_proj(ID,<include refid="insert_all_cols"/>)
+		INSERT INTO t_tab(ID,<include refid="insert_all_cols"/>)
 			VALUES
 				(#{id},
 					#{projCode},
@@ -118,7 +118,7 @@
 				)
 	</insert>
 	<insert id="batchInsertWithId">
-		INSERT INTO t_proj(ID,<include refid="insert_all_cols"/>)
+		INSERT INTO t_tab(ID,<include refid="insert_all_cols"/>)
 			VALUES
 			<foreach item="item" index="index" collection="list" open="" separator="," close="">
 				(#{item.id},
@@ -129,7 +129,7 @@
 			</foreach>
 	</insert>
 	<update id="update">
-		update t_proj
+		update t_tab
 		<set>
 			proj_code = #{projCode},
 			proj_name = #{projName},
@@ -139,10 +139,10 @@
 		where id = #{id} and version = #{version}
 	</update>
 	<delete id="delete">
-		delete from t_proj
+		delete from t_tab
 		<include refid="where_all"/>
 	</delete>
 	<delete id="deleteById">
-		delete from t_proj where id = #{id}
+		delete from t_tab where id = #{id}
 	</delete>
 </mapper>

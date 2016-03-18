@@ -1,24 +1,22 @@
 package com.bricks.facade;
 
+import com.bricks.lang.log.LogAble;
+import com.bricks.dal.Page;
+import com.bricks.dal.QueryResult;
+import com.bricks.facade.dao.proj.Proj;
+import com.bricks.facade.dao.proj.ProjDao;
 import java.util.List;
-
 import javax.annotation.Resource;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.bricks.dal.Page;
-import com.bricks.dal.QueryResult;
-import com.bricks.facade.dao.proj.Proj;
-import com.bricks.facade.dao.proj.ProjDao;
-
 /**
  * @author bricks <long1795@gmail.com>
  */
 @Controller
-public class DefaultController {
+public class DefaultController implements LogAble {
 
 	@Resource
 	private ProjDao dao;
@@ -33,14 +31,14 @@ public class DefaultController {
 	}
 
 	@RequestMapping({ "/", "/index" })
-	public ModelAndView showSeedstarters(final Integer currPage) {
+	public ModelAndView index(final Integer currPage) {
 		int page = (currPage == null || currPage < 1) ? 1 : currPage;
 		QueryResult<Proj> data = dao.queryResult(new Proj(), page, Page.DEFAULT_PAGE_SIZE);
 		return new ModelAndView("tables").addObject("pages", new Page(1, data.getCount().intValue(), data.getData().size())).addObject("allProjs", data.getData());
 	}
 
 	@RequestMapping({ "/detail" })
-	public ModelAndView showSeedstarters(final Long id) {
+	public ModelAndView detail(final Long id) {
 		if(id == null){
 			return new ModelAndView("jsonView").addObject("msg", "fail");
 		}
@@ -48,8 +46,19 @@ public class DefaultController {
 	}
 
 	@RequestMapping({ "/save" })
-	public ModelAndView showSeedstarters(final Proj proj) {
+	public ModelAndView save(final Proj proj) {
 		dao.save(proj);
+		if(proj.getId() != null){
+			log().info("-------------------------------");
+			log().info("Proj id=[{}], version=[{}], code=[{}], name=[{}]", proj.getId(), proj.getVersion(), proj.getProjCode(), proj.getProjName());
+			log().info("-------------------------------");
+		}
+		return new ModelAndView("jsonView").addObject("msg", "succ");
+	}
+
+	@RequestMapping({ "/delete" })
+	public ModelAndView delete(final Long id) {
+		dao.deleteById(id);
 		return new ModelAndView("jsonView").addObject("msg", "succ");
 	}
 
