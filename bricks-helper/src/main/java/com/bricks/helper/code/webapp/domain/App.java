@@ -3,12 +3,13 @@ package com.bricks.helper.code.webapp.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.bricks.lang.BaseObject;
+import com.bricks.helper.code.CodeGenReq;
+import com.bricks.helper.code.CodeType;
 
 /**
  * @author bricks <long1795@gmail.com>
  */
-public class App extends BaseObject {
+public class App extends CodeGenReq {
 	private static final long serialVersionUID = 1L;
 
 	private String appName;
@@ -25,6 +26,24 @@ public class App extends BaseObject {
 		super();
 		this.appName = appName;
 		this.memo = memo;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.bricks.helper.code.CodeGenReq#codeType()
+	 */
+	public CodeType codeType() {
+		return CodeType.WEBAPP;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.bricks.helper.code.CodeGenReq#outputPath()
+	 */
+	public String outputPath() {
+		return "./" + appName + "/";
 	}
 
 	public String getAppName() {

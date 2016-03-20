@@ -1,0 +1,14 @@
+<pagging th:fragment="pagging">
+  <div class="dataTables_info" id="data-table_info" th:text="'Showing ' + ${pages.pageSize * pages.currentPage} + ' to ' + ${pages.pageSize * pages.currentPage + pages.currentSize} + ' of ' + ${pages.pageSize * pages.maxPage} + ' entries'">Showing 1 to 6 of entries</div>
+  <div class="dataTables_paginate paging_full_numbers" id="data-table_paginate">
+    <a tabindex="0" class="first paginate_button paginate_button_disabled" id="data-table_first">First</a>
+    <a tabindex="0" class="previous paginate_button paginate_button_disabled" id="data-table_previous">Previous</a>
+    <span>
+      <a tabindex="0" class="paginate_active" th:each="pg : ${#numbers.sequence(1, pages.maxPage)}" th:href="@{''(currPage=${pg})}" th:text="${pg}">1</a>
+    </span>
+    <a tabindex="0" class="next paginate_button" id="data-table_next">Next</a>
+    <a tabindex="0" class="last paginate_button" id="data-table_last">Last</a>
+  </div>
+  <div class="clearfix">
+  </div>
+</pagging>

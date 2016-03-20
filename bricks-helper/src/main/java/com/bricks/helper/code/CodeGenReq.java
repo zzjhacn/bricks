@@ -1,18 +1,15 @@
 package com.bricks.helper.code;
 
 import com.bricks.lang.BaseObject;
+import com.bricks.helper.code.CodeType;
 
 /**
  * @author bricks <long1795@gmail.com>
  */
-public class CodeGenReq extends BaseObject {
+public abstract class CodeGenReq extends BaseObject {
 	private static final long serialVersionUID = 1L;
 
-	private String codeType;
+	public abstract CodeType codeType();
 
-	private String pkg;
-
-	private String className;
-
-	private String classComment;
+	public abstract String outputPath();
 }

@@ -20,6 +20,8 @@ public class Attribute extends BaseObject {
 
 	private boolean nullAble;
 
+	private String defaultVal;
+
 	private boolean queryAble = true;
 
 	private String rege;
@@ -92,6 +94,14 @@ public class Attribute extends BaseObject {
 
 	public void setNullAble(boolean nullAble) {
 		this.nullAble = nullAble;
+	}
+
+	public String getDefaultVal(){
+		return defaultVal;
+	}
+
+	public void setDefaultVal(String defaultVal){
+		this.defaultVal = defaultVal;
 	}
 
 	public boolean isQueryAble() {

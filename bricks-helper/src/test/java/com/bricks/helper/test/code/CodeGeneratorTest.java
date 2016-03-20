@@ -3,8 +3,9 @@ package com.bricks.helper.test.code;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.bricks.helper.code.CodeGenReq;
+import com.bricks.helper.code.CodeGenResp;
 import com.bricks.helper.code.CodeGenerator;
-import com.bricks.helper.code.impl.CodeGeneratorImpl;
 import com.bricks.lang.log.LogAble;
 
 /**
@@ -12,7 +13,12 @@ import com.bricks.lang.log.LogAble;
  */
 public class CodeGeneratorTest implements LogAble {
 
-	CodeGenerator cg = new CodeGeneratorImpl();
+	CodeGenerator<?> cg = new CodeGenerator<CodeGenReq>() {
+		@Override
+		public CodeGenResp generate(CodeGenReq request) {
+			return null;
+		}
+	};
 
 	@Test
 	public void test() throws Exception {
