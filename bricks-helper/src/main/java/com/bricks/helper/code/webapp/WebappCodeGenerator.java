@@ -39,7 +39,7 @@ public class WebappCodeGenerator implements CodeGenerator<App> {
 			request.getDomains().forEach(d -> {
 				File templateRoot = new File(request.codeType().getTemplatePath());
 				VelocityContext vc = buildDomainVc(request, d);
-				Arrays.asList(templateRoot.listFiles(FileUtil.simpleFileFilter(".java"))).forEach(f -> {
+				Arrays.asList(templateRoot.listFiles()).forEach(f -> {
 					VelocityUtil.write(vc, f.getPath(), request.outputPath() + PATH_JAVA + "com/" + request.getAppName() + "/");
 				});
 			});

@@ -12,16 +12,16 @@ import com.bricks.facade.codegen.dao.proj.ProjDao;
 /**
  * @author bricks <long1795@gmail.com>
  */
-//@Controller()
-//@RequestMapping({ "/codegen" })
-public class CodeGenController extends DefaultController<Proj, ProjDao> {
+@Controller()
+@RequestMapping({ "/proj" })
+public class ProjController extends DefaultController<Proj, ProjDao> {
 
 	@Resource
 	public void setDao(ProjDao dao) {
 		this.dao = dao;
 	}
 
-		protected String subPath(){
-			return "";
-		}
+	protected String subPath(){
+		return "proj";
+	}
 }

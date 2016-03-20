@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Bricks</title>
+
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="bricks" />
+    <meta name="keywords" content="bricks code-gen" />
+    <meta name="author" content="Gray" />
+
+    <link rel="shortcut icon" href="img/favicon.ico" th:href="@{/img/favicon.ico}"/>
+    <link href="css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link href="css/new.css" th:href="@{/css/new.css}" rel="stylesheet"/>
+    <link href="fonts/font-awesome.min.css" th:href="@{/fonts/font-awesome.min.css}" rel="stylesheet"/>
+
+    <!-- HTML5 shiv and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.js"></script>
+      <script src="js/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <!-- <div th:include="header :: header"></div> -->
+    <!-- Main Container start -->
+    <div class="dashboard-container">
+
+      <div class="container">
+        <div th:include="menu :: menu"></div>
+        <!-- Dashboard Wrapper Start -->
+        <div class="dashboard-wrapper">
+
+          <!-- Left Sidebar Start -->
+          <div class="left-sidebar">
+
+            <!-- Row Start -->
+            <!-- <div th:include="proj/proj :: grid"></div> -->
+            <!-- Row End -->
+
+            <!-- Row Start -->
+            <!-- <div th:include="domain/domain :: grid"></div> -->
+            <!-- Row End -->
+
+            <!-- Row Start -->
+            <div class="row">
+              <div class="col-lg-12 col-md-12">
+                <div class="widget">
+                  <div class="widget-header">
+                    <div class="title">
+                      Members
+                    </div>
+                  </div>
+                  <div class="widget-body">
+                    <table class="table table-bordered no-margin">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>First Name</th>
+                          <th>Last Name</th>
+                          <th>Username</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td rowspan="2">1</td>
+                          <td>Mark</td>
+                          <td>Otto</td>
+                          <td>@mdo</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Row End -->
+
+          </div>
+          <!-- Left Sidebar End -->
+
+          <!-- Right Sidebar Start -->
+          <div class="right-sidebar">
+            <div class="wrapper">
+              <table class="table table-condensed table-striped table-bordered table-hover no-margin">
+                <thead>
+                  <tr>
+                    <th style="width:10%">
+                      <input type="checkbox" class="no-margin" />
+                    </th>
+                    <th style="width:70%">
+                      Name
+                    </th>
+                    <th style="width:20%">
+                      Status
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="error">
+                    <td>
+                      <input type="checkbox" class="no-margin" />
+                    </td>
+                    <td>
+                      <span class="name">
+                        Mahendra Singh Dhoni
+                      </span>
+                    </td>
+                    <td>
+                      <span class="label label-info">
+                        New
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <hr class="hr-stylish-1"/>
+
+            <div class="wrapper">
+              <div class="btn-toolbar no-margin">
+                <div class="btn-group">
+                  <a href="#" class="btn btn-success">
+                    <i class="fa fa-headphones">
+                    </i>
+                  </a>
+                  <a href="#" class="btn btn-warning">
+                    <i class="fa fa-thumbs-down">
+                    </i>
+                  </a>
+                  <a href="#" class="btn btn-danger">
+                    <i class="fa fa-signal">
+                    </i>
+                  </a>
+                  <a href="#" class="btn btn-info">
+                    <i class="fa fa-share">
+                    </i>
+                  </a>
+                </div>
+                <div class="btn-group">
+                  <a href="#" class="btn btn-default">
+                    <i class="fa fa-leaf"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <hr class="hr-stylish-1"/>
+
+            <div class="wrapper">
+              <table class="table table-condensed table-striped table-bordered table-hover no-margin">
+                <thead>
+                  <tr>
+                    <th style="width:10%">
+                      <input type="checkbox" class="no-margin" />
+                    </th>
+                    <th style="width:70%">
+                      Name
+                    </th>
+                    <th style="width:20%">
+                      Status
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="success">
+                    <td>
+                      <input type="checkbox" class="no-margin" />
+                    </td>
+                    <td>
+                      <span class="name">
+                        Mahendra Singh Dhoni
+                      </span>
+                    </td>
+                    <td>
+                      <span class="label label-info">
+                        New
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <!-- Right Sidebar End -->
+
+        </div>
+        <!-- Dashboard Wrapper End -->
+
+        <footer>
+          <p>© BlueMoon 2013-14</p>
+        </footer>
+
+      </div>
+    </div>
+    <!-- Main Container end -->
+
+    <script src="js/jquery.js" th:src="@{/js/jquery.js}"></script>
+    <script src="js/bootstrap.min.js" th:src="@{/js/bootstrap.min.js}"></script>
+    <script src="js/jquery.scrollUp.js" th:src="@{/js/jquery.scrollUp.js}"></script>
+    <script src="js/jquery.datatables.js" th:src="@{/js/jquery.datatables.js}"></script>
+
+    <!-- Custom JS -->
+    <script src="js/menu.js" th:src="@{/js/menu.js}"></script>
+
+    <script type="text/javascript" th:inline="javascript">
+      //ScrollUp
+      $(function () {
+        $.scrollUp({
+          scrollName: 'scrollUp', // Element ID
+          topDistance: '300', // Distance from top before showing element (px)
+          topSpeed: 300, // Speed back to top (ms)
+          animation: 'fade', // Fade, slide, none
+          animationInSpeed: 400, // Animation in speed (ms)
+          animationOutSpeed: 400, // Animation out speed (ms)
+          scrollText: 'Top', // Text for element
+          activeOverlay: false, // Set CSS color to display scrollUp active point, e.g '#00FFFF'
+        });
+      });
+
+      //Tooltip
+      $('a').tooltip('hide');
+
+      //Popover
+      $('.popover-pop').popover('hide');
+
+      //Dropdown
+      $('.dropdown-toggle').dropdown();
+
+      //Data Tables
+      $(document).ready(function () {
+        $('#data-table').dataTable({
+          "sPaginationType": "full_numbers"
+        });
+      });
+
+      var del = function (id){
+        $.ajax({
+          type:"post",
+          url:[[@{/delete}]],
+          data:{
+            id:id
+          },
+          success:function(data){
+            location.reload();
+          }
+        });
+        return false;
+      };
+
+      $('#projDetail').on('submit',function(){
+        $.ajax({
+          type:"post",
+          url:[[@{/save}]],
+          data:{
+            id:$('#id').val(),
+            version:$('#version').val(),
+            projCode:$('#projCode').val(),
+            projName:$('#projName').val()
+          },
+          success:function(data){
+            location.reload();
+          }
+        });
+        return false;
+      });
+
+      $('#modelDetail').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        var mid = button.data('mid');
+        var modal = $(this);
+        if( mid > -1){
+          modal.find('.modal-title').text('Edit message to ' + mid);
+          $.ajax({
+            type:"post",
+            url:[[@{/detail}]],
+            data:{
+                id:mid
+            },
+            success: function (data) {
+              modal.find('#id').val(data.detail.id);
+              modal.find('#version').val(data.detail.version);
+              modal.find('#projCode').val(data.detail.projCode);
+              modal.find('#projName').val(data.detail.projName);
+            }
+          });
+        }else{
+          modal.find('#id').val('');
+          modal.find('#version').val('');
+          modal.find('#projCode').val('');
+          modal.find('#projName').val('');
+          modal.find('.modal-title').text('New message to ' + mid);
+        }
+      })
+
+    </script>
+
+  </body>
+</html>
