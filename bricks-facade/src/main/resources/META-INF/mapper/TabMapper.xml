@@ -4,15 +4,21 @@
 	<resultMap type="com.bricks.facade.codegen.dao.tab.Tab" id="result"/>
     <sql id="select_all_cols">
     	ID,
-		proj_code as projCode,
-		proj_name as projName,
+		id_proj as idProj,
+		tab_code as tabCode,
+		tab_name as tabName,
+		display as display,
+		editable as editable,
 		CREATE_TIME as createTime,
 		UPDATE_TIME as updateTime,
 		VERSION
     </sql>
     <sql id="insert_all_cols">
-		proj_code,
-		proj_name,
+		id_proj,
+		tab_code,
+		tab_name,
+		display,
+		editable,
 		CREATE_TIME,
 		UPDATE_TIME,
 		VERSION
@@ -22,11 +28,20 @@
 		<if test="cond.id != null">
 			AND id = #{cond.id}
 		</if>
-		<if test="cond.projCode != null">
-			AND proj_code = #{cond.projCode}
+		<if test="cond.idProj != null">
+			AND id_proj = #{cond.idProj}
 		</if>
-		<if test="cond.projName != null">
-			AND proj_name = #{cond.projName}
+		<if test="cond.tabCode != null">
+			AND tab_code = #{cond.tabCode}
+		</if>
+		<if test="cond.tabName != null">
+			AND tab_name = #{cond.tabName}
+		</if>
+		<if test="cond.display != null">
+			AND display = #{cond.display}
+		</if>
+		<if test="cond.editable != null">
+			AND editable = #{cond.editable}
 		</if>
 		<if test="cond.version != null">
 			AND version = #{cond.version}
@@ -92,8 +107,11 @@
 		INSERT INTO t_tab(<include refid="insert_all_cols"/>)
 			VALUES
 				(
-					#{projCode},
-					#{projName},
+					#{idProj},
+					#{tabCode},
+					#{tabName},
+					#{display},
+					#{editable},
 					current_timestamp,current_timestamp,1
 				)
 	</insert>
@@ -102,8 +120,11 @@
 			VALUES
 			<foreach item="item" index="index" collection="list" open="" separator="," close="">
 				(
-					#{item.projCode},
-					#{item.projName},
+					#{item.idProj},
+					#{item.tabCode},
+					#{item.tabName},
+					#{item.display},
+					#{item.editable},
 					current_timestamp,current_timestamp,1
 				)
 			</foreach>
@@ -112,8 +133,11 @@
 		INSERT INTO t_tab(ID,<include refid="insert_all_cols"/>)
 			VALUES
 				(#{id},
-					#{projCode},
-					#{projName},
+					#{idProj},
+					#{tabCode},
+					#{tabName},
+					#{display},
+					#{editable},
 					current_timestamp,current_timestamp,1
 				)
 	</insert>
@@ -122,8 +146,11 @@
 			VALUES
 			<foreach item="item" index="index" collection="list" open="" separator="," close="">
 				(#{item.id},
-					#{item.projCode},
-					#{item.projName},
+					#{item.idProj},
+					#{item.tabCode},
+					#{item.tabName},
+					#{item.display},
+					#{item.editable},
 					current_timestamp,current_timestamp,1
 				)
 			</foreach>
@@ -131,8 +158,11 @@
 	<update id="update">
 		update t_tab
 		<set>
-			proj_code = #{projCode},
-			proj_name = #{projName},
+			id_proj = #{idProj},
+			tab_code = #{tabCode},
+			tab_name = #{tabName},
+			display = #{display},
+			editable = #{editable},
 			version = version + 1,
 			update_time = current_timestamp
 		</set>

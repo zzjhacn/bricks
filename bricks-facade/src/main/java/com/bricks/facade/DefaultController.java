@@ -1,5 +1,6 @@
 package com.bricks.facade;
 
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -16,6 +17,11 @@ public abstract class DefaultController<E extends BaseEO, D extends DAO<E>> impl
 	protected D dao;
 
 	protected abstract String subPath();
+
+	@ModelAttribute("currPath")
+	public String populateTypes() {
+		return subPath();
+	}
 
 	@RequestMapping({ "/", "/index" })
 	public ModelAndView index(final Integer currPage, final E cond) {

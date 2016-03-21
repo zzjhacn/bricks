@@ -14,9 +14,9 @@ public class Tab extends BaseEO {
 
 	private String tabName;// 项目名
 
-	private int display;//
+	private Integer display;//
 
-	private int editable;//
+	private Integer editable;//
 
 	/**
 	* Returns value of idProj
@@ -70,7 +70,7 @@ public class Tab extends BaseEO {
 	* Returns value of display
 	* @return
 	*/
-	public int getDisplay() {
+	public Integer getDisplay() {
 		return display;
 	}
 
@@ -78,7 +78,7 @@ public class Tab extends BaseEO {
 	* Sets new value of display
 	* @param
 	*/
-	public void setDisplay(int display) {
+	public void setDisplay(Integer display) {
 		this.display = display;
 	}
 
@@ -86,7 +86,7 @@ public class Tab extends BaseEO {
 	* Returns value of editable
 	* @return
 	*/
-	public int getEditable() {
+	public Integer getEditable() {
 		return editable;
 	}
 
@@ -94,7 +94,7 @@ public class Tab extends BaseEO {
 	* Sets new value of editable
 	* @param
 	*/
-	public void setEditable(int editable) {
+	public void setEditable(Integer editable) {
 		this.editable = editable;
 	}
 }

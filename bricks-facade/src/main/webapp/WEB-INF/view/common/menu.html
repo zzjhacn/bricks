@@ -14,7 +14,7 @@
           Forms
         </a>
       </li>
-      <li class=''>
+      <li th:class='${currPath == "proj" || currPath == "tab" ? "active" : ""}'>
         <a href='#'><i class="fa fa-bar-chart-o"></i>CodeGen</a>
         <ul>
            <li><a href='flot.html' th:href="@{/proj/}">Projects</a></li>
@@ -56,7 +56,7 @@
           <li><a href='500.html'>500</a></li>
         </ul>
       </li>
-      <li class='active'>
+      <li>
         <a href='#'><i class="fa fa-table"></i>Tables</a>
         <ul>
           <li><a href='tables.html'>Tables</a></li>
@@ -87,7 +87,7 @@
   <!-- Top Nav End -->
 
   <!-- Sub Nav End -->
-  <div class="sub-nav hidden-sm hidden-xs">
+  <!-- <div class="sub-nav hidden-sm hidden-xs">
     <ul>
       <li><a href="" class="heading">Tables</a></li>
       <li class="hidden-sm hidden-xs">
@@ -101,6 +101,6 @@
       <input type="text" class="search-query" placeholder="Search here ..."></input>
       <i class="fa fa-search"></i>
     </div>
-  </div>
+  </div> -->
   <!-- Sub Nav End -->
 </menu>
