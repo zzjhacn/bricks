@@ -3,10 +3,12 @@ package com.bricks.dal;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.bricks.lang.log.LogAble;
+
 /**
  * @author bricks <long1795@gmail.com>
  */
-public interface DAO<O extends BaseEO> {
+public interface DAO<O extends BaseEO> extends LogAble {
 	static int PAGE_FIRST = 1;
 	static int PAGE_SIZE = 20;
 

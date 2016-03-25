@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.annotation.Resource;
 import javax.persistence.OptimisticLockException;
@@ -23,14 +25,30 @@ import com.bricks.dal.StatementName;
  */
 public abstract class MybatisDAO<O extends BaseEO> extends StatementName implements DAO<O>, InitializingBean {
 
-	@Resource//(name = "sqlSessionFactory")
+	final static Lock lock = new ReentrantLock();
+
+	@Resource   // (name = "sqlSessionFactory")
 	protected SqlSessionFactory sqlSessionFactory;
 
-	protected SqlSessionTemplate template;
+	protected static SqlSessionTemplate template;
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		template = new SqlSessionTemplate(sqlSessionFactory, ExecutorType.BATCH);
+		if (template == null) {
+			lock.lock();
+			try {
+				if (template == null) {
+					template = new SqlSessionTemplate(sqlSessionFactory, ExecutorType.BATCH);
+				}
+			} finally {
+				lock.unlock();
+			}
+		}
+		// sqlSessionFactory.getConfiguration().getMappedStatements().forEach(ms -> {
+		// log().info("----->>>>>id=[{}],resultMap=[{}],resultMap[0]=[{}]", ms.getId(), ms.getResultMaps().size(),
+		// ms.getResultMaps().isEmpty() ? "non" : ms.getResultMaps().get(0).getId(),
+		// ms.getResultMaps().isEmpty() ? "non" : ms.getResultMaps().get(0).getType());
+		// });
 	}
 
 	@Override

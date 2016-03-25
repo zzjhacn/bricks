@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bricks.facade.codegen.dao.proj.ProjDao">
+	<resultMap type="com.bricks.facade.codegen.dao.proj.Proj" id="result"/>
+    <sql id="select_all_cols">
+    	ID,
+		proj_code as projCode,
+		proj_name as projName,
+		CREATE_TIME as createTime,
+		UPDATE_TIME as updateTime,
+		VERSION
+    </sql>
+    <sql id="insert_all_cols">
+		proj_code,
+		proj_name,
+		CREATE_TIME,
+		UPDATE_TIME,
+		VERSION
+    </sql>
+    <sql id="where_all">
+		WHERE 1=1
+		<if test="cond.id != null">
+			AND id = #{cond.id}
+		</if>
+		<if test="cond.projCode != null">
+			AND proj_code = #{cond.projCode}
+		</if>
+		<if test="cond.projName != null">
+			AND proj_name = #{cond.projName}
+		</if>
+		<if test="cond.version != null">
+			AND version = #{cond.version}
+		</if>
+		<if test="cond.ids != null">
+			and id in
+			<foreach item="item" index="index" collection="cond.ids" open="(" separator="," close=")">
+				#{item}
+ 			</foreach>
+		</if>
+		<if test="cond.createTimeB != null">
+		<![CDATA[
+			AND create_time >= #{cond.createTimeB}
+		]]>
+		</if>
+		<if test="cond.createTimeE != null">
+		<![CDATA[
+			AND create_time <= #{cond.createTimeE}
+		]]>
+		</if>
+		<if test="cond.updateTimeB != null">
+		<![CDATA[
+			AND update_time >= #{cond.updateTimeB}
+		]]>
+		</if>
+		<if test="cond.updateTimeE != null">
+		<![CDATA[
+			AND update_time <= #{cond.updateTimeE}
+		]]>
+		</if>
+    </sql>
+	<select id="select" resultMap="result">
+		select <include refid="select_all_cols"/>
+		FROM t_proj
+		WHERE ID=#{id}
+		<if test="lock">
+		FOR UPDATE
+		</if>
+	</select>
+	<select id="query" resultMap="result">
+		select
+		<if test="start != null">
+		limit #{start} #{size}
+		</if>
+		<include refid="select_all_cols"/>
+		FROM t_proj
+		<include refid="where_all"/>
+		<if test="start != null">
+		order by create_time desc
+		</if>
+	</select>
+	<select id="count" resultType="java.lang.Long">
+		select count(0)
+		FROM t_proj
+		<include refid="where_all"/>
+	</select>
+	<select id="sum" resultType="java.math.BigDecimal">
+		select sum(${col})
+		FROM t_proj
+		<include refid="where_all"/>
+	</select>
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" >
+		INSERT INTO t_proj(<include refid="insert_all_cols"/>)
+			VALUES
+				(
+					#{projCode},
+					#{projName},
+					current_timestamp,current_timestamp,1
+				)
+	</insert>
+	<insert id="batchInsert">
+		INSERT INTO t_proj(<include refid="insert_all_cols"/>)
+			VALUES
+			<foreach item="item" index="index" collection="list" open="" separator="," close="">
+				(
+					#{item.projCode},
+					#{item.projName},
+					current_timestamp,current_timestamp,1
+				)
+			</foreach>
+	</insert>
+	<insert id="insertWithId">
+		INSERT INTO t_proj(ID,<include refid="insert_all_cols"/>)
+			VALUES
+				(#{id},
+					#{projCode},
+					#{projName},
+					current_timestamp,current_timestamp,1
+				)
+	</insert>
+	<insert id="batchInsertWithId">
+		INSERT INTO t_proj(ID,<include refid="insert_all_cols"/>)
+			VALUES
+			<foreach item="item" index="index" collection="list" open="" separator="," close="">
+				(#{item.id},
+					#{item.projCode},
+					#{item.projName},
+					current_timestamp,current_timestamp,1
+				)
+			</foreach>
+	</insert>
+	<update id="update">
+		update t_proj
+		<set>
+			proj_code = #{projCode},
+			proj_name = #{projName},
+			version = version + 1,
+			update_time = current_timestamp
+		</set>
+		where id = #{id} and version = #{version}
+	</update>
+	<delete id="delete">
+		delete from t_proj
+		<include refid="where_all"/>
+	</delete>
+	<delete id="deleteById">
+		delete from t_proj where id = #{id}
+	</delete>
+</mapper>

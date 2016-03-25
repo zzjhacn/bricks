@@ -1,4 +1,4 @@
-package com.bricks.facade.codegen;
+package com.bricks.facade.codegen.controller;
 
 import javax.annotation.Resource;
 

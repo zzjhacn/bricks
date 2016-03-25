@@ -13,5 +13,4 @@ public class TabDao extends MybatisDAO<Tab> {
 	protected String buildStatementName(String suffix) {
 		return getClass().getName() + "." + suffix;
 	}
-
 }
