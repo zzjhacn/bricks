@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import com.bricks.dal.ann.Cond;
+import com.bricks.dal.ann.Operator;
 import com.bricks.lang.BaseObject;
 
 /**
@@ -13,14 +15,24 @@ public abstract class BaseEO extends BaseObject {
 	private static final long serialVersionUID = 1L;
 
 	private Long id;
+
+	@Cond(target = "id", operator = Operator.IN)
 	transient private List<Long> ids;
 
 	private Date createTime;
+
+	@Cond(target = "createTime", operator = Operator.GTE)
 	transient private Date createTimeB;
+
+	@Cond(target = "createTime", operator = Operator.LTE)
 	transient private Date createTimeE;
 
 	private Date updateTime;
+
+	@Cond(target = "updateTime", operator = Operator.GTE)
 	transient private Date updateTimeB;
+
+	@Cond(target = "updateTime", operator = Operator.LTE)
 	transient private Date updateTimeE;
 
 	private Integer version;
