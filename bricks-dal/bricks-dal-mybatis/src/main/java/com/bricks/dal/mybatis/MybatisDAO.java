@@ -7,8 +7,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import javax.annotation.Resource;
 import javax.persistence.OptimisticLockException;
@@ -31,7 +29,6 @@ import org.apache.ibatis.scripting.xmltags.StaticTextSqlNode;
 import org.apache.ibatis.scripting.xmltags.TextSqlNode;
 import org.apache.ibatis.scripting.xmltags.WhereSqlNode;
 import org.apache.ibatis.session.Configuration;
-import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -51,129 +48,115 @@ import com.bricks.utils.reflect.ReflectUtil;
  */
 public abstract class MybatisDAO<O extends BaseEO> extends StatementName implements DAO<O>, InitializingBean {
 
-	public final static Lock lock = new ReentrantLock();
-
 	@Resource
 	protected SqlSessionFactory sqlSessionFactory;
 
-	protected static SqlSessionTemplate batchTemplate;
-	protected static SqlSessionTemplate simpleTemplate;
+	@Resource
+	protected SqlSessionTemplate batchTemplate;
+
+	@Resource
+	protected SqlSessionTemplate simpleTemplate;
+
+	protected Configuration cfg;
+	protected Class<Object> clazz;
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		batchTemplate = initTemplate(batchTemplate, ExecutorType.BATCH);
-		simpleTemplate = initTemplate(simpleTemplate, ExecutorType.SIMPLE);
-
-		Configuration cfg = sqlSessionFactory.getConfiguration();
-		Class<Object> clazz = ReflectUtil.getSuperClassGenricType(getClass(), 0);
-		simpleExtension(cfg, clazz);
+		cfg = sqlSessionFactory.getConfiguration();
+		clazz = ReflectUtil.getSuperClassGenricType(getClass(), 0);
+		simpleExtension();
 	}
 
-	private SqlSessionTemplate initTemplate(SqlSessionTemplate template, ExecutorType et) {
-		if (template == null) {
-			lock.lock();
-			try {
-				if (template == null) {
-					template = new SqlSessionTemplate(sqlSessionFactory, et);
-				}
-			} finally {
-				lock.unlock();
-			}
-		}
-		return template;
+	private void simpleExtension() {
+		cfg.addMappedStatement(count());
+		cfg.addMappedStatement(query());
+		cfg.addMappedStatement(select());
+		cfg.addMappedStatement(insert(statementName_Insert(), false, false));
+		cfg.addMappedStatement(insert(statementName_InsertWithId(), true, false));
+		cfg.addMappedStatement(insert(statementName_BatchInsert(), false, true));
+		cfg.addMappedStatement(insert(statementName_BatchInsertWithId(), true, true));
+		cfg.addMappedStatement(delete());
+		cfg.addMappedStatement(deleteById());
+		cfg.addMappedStatement(update());
 	}
 
-	private void simpleExtension(final Configuration cfg, final Class<Object> clazz) {
-		cfg.addMappedStatement(count(cfg, clazz));
-		cfg.addMappedStatement(query(cfg, clazz));
-		cfg.addMappedStatement(select(cfg, clazz));
-		cfg.addMappedStatement(insert(cfg, clazz, statementName_Insert(), false, false));
-		cfg.addMappedStatement(insert(cfg, clazz, statementName_InsertWithId(), true, false));
-		cfg.addMappedStatement(insert(cfg, clazz, statementName_BatchInsert(), false, true));
-		cfg.addMappedStatement(insert(cfg, clazz, statementName_BatchInsertWithId(), true, true));
-		cfg.addMappedStatement(delete(cfg, clazz));
-		cfg.addMappedStatement(deleteById(cfg, clazz));
-		cfg.addMappedStatement(update(cfg, clazz));
-	}
-
-	private MappedStatement select(final Configuration cfg, final Class<Object> clazz) {
+	protected MappedStatement select() {
 		String id = statementName_Select();
 
-		SqlNode select = new TextSqlNode("select * from " + StringUtil.propertyToColumn(clazz.getSimpleName(), "t") + " where id=#{id}");
+		SqlNode select = new TextSqlNode("select " + selectSql() + " from " + StringUtil.propertyToColumn(clazz.getSimpleName(), "t") + " where id=#{id}");
 		SqlNode sql = new MixedSqlNode(Arrays.asList(select, new IfSqlNode(new TextSqlNode(" for update"), "lock")));
 
-		ResultMap.Builder rb = new ResultMap.Builder(cfg, id, clazz, resultMapping(cfg, clazz));
+		ResultMap.Builder rb = new ResultMap.Builder(cfg, id, clazz, resultMapping());
 		ParameterMap.Builder pb = new ParameterMap.Builder(cfg, "defaultParameterMap", clazz, new ArrayList<ParameterMapping>());
-		return mappedStatement(cfg, id, sql, Arrays.asList(rb.build()), pb.build());
+		return mappedStatement(id, sql, Arrays.asList(rb.build()), pb.build());
 	}
 
-	private MappedStatement query(final Configuration cfg, final Class<Object> clazz) {
+	protected MappedStatement query() {
 		String id = statementName_Query();
 
 		SqlNode limit = new IfSqlNode(new TextSqlNode(" limit #{start} #{size} "), "start != null");
 		SqlNode select = new MixedSqlNode(Arrays.asList(new StaticTextSqlNode("select "), limit,
-				new StaticTextSqlNode(" * from " + StringUtil.propertyToColumn(clazz.getSimpleName(), "t"))));
-		SqlNode sql = new MixedSqlNode(Arrays.asList(select, where(cfg, clazz)));
+				new StaticTextSqlNode(selectSql() + " from " + StringUtil.propertyToColumn(clazz.getSimpleName(), "t"))));
+		SqlNode sql = new MixedSqlNode(Arrays.asList(select, where()));
 
-		ResultMap.Builder rb = new ResultMap.Builder(cfg, id, clazz, resultMapping(cfg, clazz));
+		ResultMap.Builder rb = new ResultMap.Builder(cfg, id, clazz, resultMapping());
 		ParameterMap.Builder pb = new ParameterMap.Builder(cfg, "defaultParameterMap", clazz, new ArrayList<ParameterMapping>());
-		return mappedStatement(cfg, id, sql, Arrays.asList(rb.build()), pb.build());
+		return mappedStatement(id, sql, Arrays.asList(rb.build()), pb.build());
 	}
 
-	private MappedStatement count(final Configuration cfg, final Class<Object> clazz) {
+	protected MappedStatement count() {
 		String id = statementName_Count();
 
 		SqlNode select = new TextSqlNode("select count(0) from " + StringUtil.propertyToColumn(clazz.getSimpleName(), "t"));
-		SqlNode sql = new MixedSqlNode(Arrays.asList(select, where(cfg, clazz)));
+		SqlNode sql = new MixedSqlNode(Arrays.asList(select, where()));
 
 		ResultMap.Builder rb = new ResultMap.Builder(cfg, id, Long.class, new ArrayList<>());
 		ParameterMap.Builder pb = new ParameterMap.Builder(cfg, "defaultParameterMap", clazz, new ArrayList<ParameterMapping>());
-		return mappedStatement(cfg, id, sql, Arrays.asList(rb.build()), pb.build());
+		return mappedStatement(id, sql, Arrays.asList(rb.build()), pb.build());
 	}
 
-	private MappedStatement insert(final Configuration cfg, final Class<Object> clazz, final String id, final boolean withId, final boolean batch) {
-		SqlNode insert = insertSql(cfg, clazz, withId, batch);
+	protected MappedStatement insert(final String id, final boolean withId, final boolean batch) {
+		SqlNode insert = insertSql(withId, batch);
 
 		ResultMap.Builder rb = new ResultMap.Builder(cfg, id, Long.class, new ArrayList<>());
 		ParameterMap.Builder pb = new ParameterMap.Builder(cfg, "defaultParameterMap", clazz, new ArrayList<ParameterMapping>());
 
-		return mappedStatement(cfg, id, insert, Arrays.asList(rb.build()), pb.build(), SqlCommandType.INSERT);
+		return mappedStatement(id, insert, Arrays.asList(rb.build()), pb.build(), SqlCommandType.INSERT);
 	}
 
-	private MappedStatement update(final Configuration cfg, final Class<Object> clazz) {
+	protected MappedStatement update() {
 		String id = statementName_Update();
 
-		SqlNode insert = updateSql(cfg, clazz);
+		SqlNode insert = updateSql();
 
 		ResultMap.Builder rb = new ResultMap.Builder(cfg, id, Long.class, new ArrayList<>());
 		ParameterMap.Builder pb = new ParameterMap.Builder(cfg, "defaultParameterMap", clazz, new ArrayList<ParameterMapping>());
 
-		return mappedStatement(cfg, id, insert, Arrays.asList(rb.build()), pb.build(), SqlCommandType.UPDATE);
+		return mappedStatement(id, insert, Arrays.asList(rb.build()), pb.build(), SqlCommandType.UPDATE);
 	}
 
-	private MappedStatement delete(final Configuration cfg, final Class<Object> clazz) {
+	protected MappedStatement delete() {
 		String id = statementName_Delete();
 
 		SqlNode select = new TextSqlNode("delete from " + StringUtil.propertyToColumn(clazz.getSimpleName(), "t"));
-		SqlNode sql = new MixedSqlNode(Arrays.asList(select, where(cfg, clazz)));
+		SqlNode sql = new MixedSqlNode(Arrays.asList(select, where()));
 
 		ResultMap.Builder rb = new ResultMap.Builder(cfg, id, Long.class, new ArrayList<>());
 		ParameterMap.Builder pb = new ParameterMap.Builder(cfg, "defaultParameterMap", clazz, new ArrayList<ParameterMapping>());
-		return mappedStatement(cfg, id, sql, Arrays.asList(rb.build()), pb.build(), SqlCommandType.DELETE);
+		return mappedStatement(id, sql, Arrays.asList(rb.build()), pb.build(), SqlCommandType.DELETE);
 	}
 
-	private MappedStatement deleteById(final Configuration cfg, final Class<Object> clazz) {
+	protected MappedStatement deleteById() {
 		String id = statementName_DeleteById();
 
 		SqlNode sql = new TextSqlNode("delete from " + StringUtil.propertyToColumn(clazz.getSimpleName(), "t") + "  where id = #{id}");
 
 		ResultMap.Builder rb = new ResultMap.Builder(cfg, id, Long.class, new ArrayList<>());
 		ParameterMap.Builder pb = new ParameterMap.Builder(cfg, "defaultParameterMap", clazz, new ArrayList<ParameterMapping>());
-		return mappedStatement(cfg, id, sql, Arrays.asList(rb.build()), pb.build());
+		return mappedStatement(id, sql, Arrays.asList(rb.build()), pb.build());
 	}
 
-	private MappedStatement mappedStatement(final Configuration cfg, final String id, final SqlNode sqlNode, final List<ResultMap> rmList,
-			final ParameterMap pm, final SqlCommandType sct) {
+	protected MappedStatement mappedStatement(final String id, final SqlNode sqlNode, final List<ResultMap> rmList, final ParameterMap pm, final SqlCommandType sct) {
 		SqlSource sql = new DynamicSqlSource(cfg, sqlNode);
 		MappedStatement.Builder msb = new MappedStatement.Builder(cfg, id, sql, sct);
 		msb.resultMaps(rmList);
@@ -185,12 +168,11 @@ public abstract class MybatisDAO<O extends BaseEO> extends StatementName impleme
 		return msb.build();
 	}
 
-	private MappedStatement mappedStatement(final Configuration cfg, final String id, final SqlNode sqlNode, final List<ResultMap> rmList,
-			final ParameterMap pm) {
-		return mappedStatement(cfg, id, sqlNode, rmList, pm, SqlCommandType.SELECT);
+	protected MappedStatement mappedStatement(final String id, final SqlNode sqlNode, final List<ResultMap> rmList, final ParameterMap pm) {
+		return mappedStatement(id, sqlNode, rmList, pm, SqlCommandType.SELECT);
 	}
 
-	private SqlNode where(final Configuration cfg, final Class<Object> clazz) {
+	protected SqlNode where() {
 		List<SqlNode> condList = new ArrayList<>();
 		Class<Object> c = clazz;
 		while (!c.getName().equals(BaseObject.class.getName()) && !c.getName().equals(Object.class.getName())) {
@@ -229,7 +211,7 @@ public abstract class MybatisDAO<O extends BaseEO> extends StatementName impleme
 		return where;
 	}
 
-	private SqlNode insertSql(final Configuration cfg, final Class<Object> clazz, final boolean withId, final boolean batch) {
+	protected SqlNode insertSql(final boolean withId, final boolean batch) {
 		StringBuilder properties = new StringBuilder("(");
 		StringBuilder values = new StringBuilder("(");
 
@@ -241,7 +223,8 @@ public abstract class MybatisDAO<O extends BaseEO> extends StatementName impleme
 		Class<Object> c = clazz;
 		while (!c.getName().equals(BaseEO.class.getName()) && !c.getName().equals(Object.class.getName())) {
 			Arrays.asList(c.getDeclaredFields()).forEach(f -> {
-				if (!Modifier.isAbstract(f.getModifiers()) && !Modifier.isTransient(f.getModifiers()) && !Modifier.isFinal(f.getModifiers()) && !Modifier.isStatic(f.getModifiers())
+				if (!Modifier.isAbstract(f.getModifiers()) && !Modifier.isTransient(f.getModifiers()) && !Modifier.isFinal(f.getModifiers())
+						&& !Modifier.isStatic(f.getModifiers())
 						&& !Modifier.isStatic(f.getModifiers())
 						&& Modifier.isPrivate(f.getModifiers())) {
 					properties.append(StringUtil.propertyToColumn(f.getName())).append(",");
@@ -266,7 +249,7 @@ public abstract class MybatisDAO<O extends BaseEO> extends StatementName impleme
 		return new MixedSqlNode(Arrays.asList(new TextSqlNode(insert.toString()), valueNode));
 	}
 
-	private SqlNode updateSql(final Configuration cfg, final Class<Object> clazz) {
+	protected SqlNode updateSql() {
 		StringBuilder update = new StringBuilder("update ").append(StringUtil.propertyToColumn(clazz.getSimpleName(), "t"));
 		StringBuilder where = new StringBuilder("where id=#{id} and version=#{version}");
 
@@ -274,7 +257,8 @@ public abstract class MybatisDAO<O extends BaseEO> extends StatementName impleme
 		Class<Object> c = clazz;
 		while (!c.getName().equals(BaseEO.class.getName()) && !c.getName().equals(Object.class.getName())) {
 			Arrays.asList(c.getDeclaredFields()).forEach(f -> {
-				if (!Modifier.isAbstract(f.getModifiers()) && !Modifier.isTransient(f.getModifiers()) && !Modifier.isFinal(f.getModifiers()) && !Modifier.isStatic(f.getModifiers())
+				if (!Modifier.isAbstract(f.getModifiers()) && !Modifier.isTransient(f.getModifiers()) && !Modifier.isFinal(f.getModifiers())
+						&& !Modifier.isStatic(f.getModifiers())
 						&& !Modifier.isStatic(f.getModifiers())
 						&& Modifier.isPrivate(f.getModifiers())) {
 					set.append(StringUtil.propertyToColumn(f.getName())).append("=#{").append(f.getName()).append("}, ");
@@ -288,8 +272,25 @@ public abstract class MybatisDAO<O extends BaseEO> extends StatementName impleme
 		return new MixedSqlNode(Arrays.asList(new TextSqlNode(update.toString()), setNode, new TextSqlNode(where.toString())));
 	}
 
+	protected String selectSql() {
+		StringBuilder select = new StringBuilder(" ");
+		Class<Object> c = clazz;
+		while (!c.getName().equals(BaseObject.class.getName()) && !c.getName().equals(Object.class.getName())) {
+			Arrays.asList(c.getDeclaredFields()).forEach(f -> {
+				if (!Modifier.isAbstract(f.getModifiers()) && !Modifier.isTransient(f.getModifiers()) && !Modifier.isFinal(f.getModifiers())
+						&& !Modifier.isStatic(f.getModifiers())
+						&& !Modifier.isStatic(f.getModifiers())
+						&& Modifier.isPrivate(f.getModifiers())) {
+					select.append(StringUtil.propertyToColumn(f.getName())).append(",");
+				}
+			});
+			c = c.getSuperclass();
+		}
+		return select.deleteCharAt(select.length() - 1).toString();
+	}
+
 	// unused
-	List<ParameterMapping> parameterMapping(final Configuration cfg, final Class<Object> clazz) {
+	List<ParameterMapping> parameterMapping() {
 		final List<ParameterMapping> pmList = new ArrayList<>();
 		Class<Object> c = clazz;
 		while (!c.getName().equals(BaseObject.class.getName()) && !c.getName().equals(Object.class.getName())) {
@@ -305,7 +306,7 @@ public abstract class MybatisDAO<O extends BaseEO> extends StatementName impleme
 		return pmList;
 	}
 
-	private List<ResultMapping> resultMapping(final Configuration cfg, final Class<Object> clazz) {
+	protected List<ResultMapping> resultMapping() {
 		final List<ResultMapping> rmList = new ArrayList<>();
 		Class<Object> c = clazz;
 		while (!c.getName().equals(BaseObject.class.getName()) && !c.getName().equals(Object.class.getName())) {
@@ -367,7 +368,7 @@ public abstract class MybatisDAO<O extends BaseEO> extends StatementName impleme
 		if (pageNo >= PAGE_FIRST && pageSize > 0) {
 			params.put("start", (pageNo - 1) * pageSize);
 			params.put("size", pageSize);
-			rb = new RowBounds((pageNo - 1) * pageSize, pageSize);
+			// rb = new RowBounds((pageNo - 1) * pageSize, pageSize);
 		}
 		List<O> r = batchTemplate.selectList(statementName_Query(), params, rb);
 		if (r == null) {
