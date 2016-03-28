@@ -24,4 +24,5 @@ public class CodeGeneratorTest implements LogAble {
 	public void test() throws Exception {
 		Assert.assertEquals("d:/a/a/", cg.parsePath("d:\\a.a"));
 	}
+
 }

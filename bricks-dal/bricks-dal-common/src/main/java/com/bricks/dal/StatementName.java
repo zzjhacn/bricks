@@ -5,12 +5,8 @@ package com.bricks.dal;
  */
 public abstract class StatementName {
 
-	protected final String buildPrivateStatementName(String suffix) {
-		return this.getClass().getName() + "." + suffix;
-	}
-
 	protected String buildStatementName(String suffix) {
-		return buildPrivateStatementName(suffix);
+		return this.getClass().getName() + "." + suffix;
 	}
 
 	protected String statementName_BatchInsert() {

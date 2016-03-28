@@ -18,7 +18,7 @@
 		VERSION
     </sql>
     <sql id="where_all">
-		WHERE 1=1
+		<where>
 		<if test="cond.id != null">
 			AND id = #{cond.id}
 		</if>
@@ -57,92 +57,11 @@
 			AND update_time <= #{cond.updateTimeE}
 		]]>
 		</if>
+		</where>
     </sql>
-	<select id="select" resultMap="result">
-		select <include refid="select_all_cols"/>
-		FROM t_proj
-		WHERE ID=#{id}
-		<if test="lock">
-		FOR UPDATE
-		</if>
-	</select>
-	<select id="query" resultMap="result">
-		select
-		<if test="start != null">
-		limit #{start} #{size}
-		</if>
-		<include refid="select_all_cols"/>
-		FROM t_proj
-		<include refid="where_all"/>
-		<if test="start != null">
-		order by create_time desc
-		</if>
-	</select>
-	<select id="count" resultType="java.lang.Long">
-		select count(0)
-		FROM t_proj
-		<include refid="where_all"/>
-	</select>
 	<select id="sum" resultType="java.math.BigDecimal">
 		select sum(${col})
 		FROM t_proj
 		<include refid="where_all"/>
 	</select>
-	<insert id="insert" useGeneratedKeys="true" keyProperty="id" >
-		INSERT INTO t_proj(<include refid="insert_all_cols"/>)
-			VALUES
-				(
-					#{projCode},
-					#{projName},
-					current_timestamp,current_timestamp,1
-				)
-	</insert>
-	<insert id="batchInsert">
-		INSERT INTO t_proj(<include refid="insert_all_cols"/>)
-			VALUES
-			<foreach item="item" index="index" collection="list" open="" separator="," close="">
-				(
-					#{item.projCode},
-					#{item.projName},
-					current_timestamp,current_timestamp,1
-				)
-			</foreach>
-	</insert>
-	<insert id="insertWithId">
-		INSERT INTO t_proj(ID,<include refid="insert_all_cols"/>)
-			VALUES
-				(#{id},
-					#{projCode},
-					#{projName},
-					current_timestamp,current_timestamp,1
-				)
-	</insert>
-	<insert id="batchInsertWithId">
-		INSERT INTO t_proj(ID,<include refid="insert_all_cols"/>)
-			VALUES
-			<foreach item="item" index="index" collection="list" open="" separator="," close="">
-				(#{item.id},
-					#{item.projCode},
-					#{item.projName},
-					current_timestamp,current_timestamp,1
-				)
-			</foreach>
-	</insert>
-	<update id="update">
-		update t_proj
-		<set>
-			proj_code = #{projCode},
-			proj_name = #{projName},
-			version = version + 1,
-			update_time = current_timestamp
-		</set>
-		where id = #{id} and version = #{version}
-	</update>
-	<delete id="delete">
-		delete from t_proj
-		<include refid="where_all"/>
-	</delete>
-	<delete id="deleteById">
-		delete from t_proj where id = #{id}
-	</delete>
 </mapper>

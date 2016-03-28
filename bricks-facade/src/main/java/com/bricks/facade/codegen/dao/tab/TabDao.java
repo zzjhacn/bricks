@@ -8,9 +8,4 @@ import com.bricks.dal.mybatis.MybatisDAO;
  * @author bricks <long1795@gmail.com>
  */
 @Service
-public class TabDao extends MybatisDAO<Tab> {
-
-	protected String buildStatementName(String suffix) {
-		return getClass().getName() + "." + suffix;
-	}
-}
+public class TabDao extends MybatisDAO<Tab> {}
