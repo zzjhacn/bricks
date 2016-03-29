@@ -3,7 +3,6 @@ package com.bricks.facade.test.dao;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import com.bricks.dal.BaseEO;
@@ -26,7 +25,6 @@ public abstract class AbsDaoTest<E extends BaseEO, D extends DAO<E>> implements 
 
 	abstract protected E newE();
 
-	@Before
 	public abstract void setDao(D dao);
 
 	@Test

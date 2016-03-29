@@ -1,4 +1,4 @@
-package com.bricks.core.interrept;
+package com.bricks.core.intercept;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
@@ -17,6 +17,7 @@ public class MethodLogger implements MethodInterceptor, LogAble {
 	@Override
 	public Object invoke(MethodInvocation point) throws Throwable {
 		long start = System.currentTimeMillis();
+		System.out.println("------------------");
 		Object result = point.proceed();
 		log().info(">>>>>>>>>>>>>>>>>>#%s(%s): %s in %[msec]s", point.getMethod().getName(), point.getMethod(), result,
 				System.currentTimeMillis() - start);
