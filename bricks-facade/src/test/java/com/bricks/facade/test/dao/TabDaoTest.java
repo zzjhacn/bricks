@@ -17,9 +17,7 @@ import com.bricks.facade.codegen.dao.tab.TabDao;
 public class TabDaoTest extends AbsDaoTest<Tab, TabDao> {
 
 	@Resource
-	private TabDao tabDao;
-
-	public void setDao() {
+	public void setDao(TabDao tabDao) {
 		this.dao = tabDao;
 	}
 

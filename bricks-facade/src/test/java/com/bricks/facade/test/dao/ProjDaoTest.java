@@ -17,9 +17,7 @@ import com.bricks.facade.codegen.dao.proj.ProjDao;
 public class ProjDaoTest extends AbsDaoTest<Proj, ProjDao> {
 
 	@Resource
-	private ProjDao projDao;
-
-	public void setDao() {
+	public void setDao(ProjDao projDao) {
 		this.dao = projDao;
 	}
 

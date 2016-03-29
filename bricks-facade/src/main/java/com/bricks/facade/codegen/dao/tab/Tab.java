@@ -10,6 +10,9 @@ public class Tab extends BaseEO {
 
 	private Long idProj;//
 
+	/**
+	 * 
+	 */
 	private String tabCode;// 项目标识
 
 	private String tabName;// 项目名
@@ -46,7 +49,7 @@ public class Tab extends BaseEO {
 	* Sets new value of tabCode
 	* @param
 	*/
-	public void setTabCode(String tabCode) {
+	public void setTabCode(final String tabCode) {
 		this.tabCode = tabCode;
 	}
 

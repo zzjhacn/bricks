@@ -95,7 +95,10 @@ project(':bricks-utils'){
 project(':bricks-core'){
   dependencies {
     compile project(":bricks-lang"),
-      project(":bricks-utils")
+      project(":bricks-utils"),
+	  'org.springframework:spring-context',
+	  'org.springframework:spring-aop',
+	  'org.springframework:spring-aspects'
   }
 }
 project(':bricks-dal:bricks-dal-common'){

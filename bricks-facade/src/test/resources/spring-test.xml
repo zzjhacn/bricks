@@ -1,9 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
-	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd">
 
+	<!-- 
+	<aop:aspectj-autoproxy />
+		<aop:pointcut id="methodLogger_Pointcut" expression="execution(* com.bricks.facade.codegen.dao.tab.Tab.*(..))" />
+		<aop:advisor advice-ref="methodLogger_Advisor" pointcut-ref="methodLogger_Pointcut" />
+	 -->
+	<bean id="methodLogger_Advisor" class="com.bricks.facade.MethodLoggerInterceptor" />
+	<aop:config>
+		<aop:aspect id="a1" ref="methodLogger_Advisor">
+			<aop:pointcut id="methodLogger_Pointcut" expression="execution(* com.bricks.facade.codegen..*.*())" />
+			<aop:around method="invoke" pointcut-ref="methodLogger_Pointcut" />
+		</aop:aspect>
+	</aop:config>
 	<import resource="classpath:/META-INF/spring/dal-config.xml" />
 
 	<context:annotation-config />

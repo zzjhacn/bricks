@@ -27,7 +27,7 @@ public abstract class AbsDaoTest<E extends BaseEO, D extends DAO<E>> implements 
 	abstract protected E newE();
 
 	@Before
-	public abstract void setDao();
+	public abstract void setDao(D dao);
 
 	@Test
 	public void test() throws Exception {
