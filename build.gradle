@@ -89,7 +89,8 @@ subprojects {
 project(':bricks-utils'){
   dependencies {
     compile project(":bricks-lang"),
-      "org.apache.velocity:velocity:1.7"
+      "org.apache.velocity:velocity:1.7",
+	  'com.alibaba:fastjson:1.2.8'
   }
 }
 project(':bricks-core'){

@@ -5,17 +5,13 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd">
 
-	<bean id="methodLogger_Advisor" class="com.bricks.core.intercept.MethodLogger" />
-	<bean id="methodLogger_Before" class="com.bricks.core.intercept.MethodLoggerBefore" />
-	<aop:config>
-		<!-- <aop:pointcut id="methodLogger_Pointcut" expression="execution (* com.bricks..*(..))" /> -->
-		<aop:advisor id="adv1" advice-ref="methodLogger_Advisor" pointcut="execution (* com.bricks.facade..*.*(..))" />
-		<aop:advisor id="adv2" advice-ref="methodLogger_Before" pointcut="execution (* com.bricks..*.*(..))" />
-	</aop:config>
-	
 	<import resource="classpath:/META-INF/spring/dal-config.xml" />
 
 	<context:annotation-config />
 	<context:component-scan base-package="com.bricks.facade" />
 
+	<bean id="methodLogger_Advisor" class="com.bricks.core.intercept.MethodLogger" />
+	<aop:config proxy-target-class="true">
+		<aop:advisor id="adv1" advice-ref="methodLogger_Advisor" pointcut="execution (public * com.bricks.dal..*(..))" />
+	</aop:config>
 </beans>

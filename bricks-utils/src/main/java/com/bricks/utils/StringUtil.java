@@ -1,5 +1,9 @@
 package com.bricks.utils;
 
+import java.util.Arrays;
+
+import com.alibaba.fastjson.JSONObject;
+
 /**
  * @author bricks <long1795@gmail.com>
  */
@@ -28,5 +32,20 @@ public class StringUtil {
 			i++;
 		}
 		return sb.toString().toLowerCase();
+	}
+
+	public static String parseArgsAsString(Object[] args) {
+		if (args == null || args.length == 0) {
+			return "NaN";
+		}
+		StringBuilder sb = new StringBuilder();
+		Arrays.asList(args).forEach(a -> {
+			if (a == null) {
+				sb.append("null,");
+			} else {
+				sb.append("(").append(a.getClass().getSimpleName()).append(")").append(JSONObject.toJSONString(a)).append(",");
+			}
+		});
+		return sb.toString();
 	}
 }

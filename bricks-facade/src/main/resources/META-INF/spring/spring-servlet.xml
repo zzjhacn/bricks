@@ -11,9 +11,8 @@
 	<context:annotation-config />
 	<context:component-scan base-package="com.bricks.facade" />
 
-	<bean id="methodLogger" class="com.bricks.core.interrept.MethodLogger" />
-	<aop:config>
-		<aop:advisor advice-ref="methodLogger" pointcut="execution(* com.bricks.facade.**..*.*(..))" />
+	<bean id="methodLogger_Advisor" class="com.bricks.core.intercept.MethodLogger" />
+	<aop:config proxy-target-class="true">
+		<aop:advisor id="adv1" advice-ref="methodLogger_Advisor" pointcut="execution (public * com.bricks.dal..*(..))" />
 	</aop:config>
-
 </beans>

@@ -12,7 +12,7 @@ import com.bricks.facade.codegen.dao.proj.ProjDao;
 /**
  * @author bricks <long1795@gmail.com>
  */
-@Controller()
+@Controller
 @RequestMapping({ "/codegen" })
 public class CodeGenController extends DefaultController<Proj, ProjDao> {
 
