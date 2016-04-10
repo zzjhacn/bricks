@@ -5,6 +5,7 @@ package com.bricks.helper.code;
  */
 public enum CodeType {
 	API("../template/api/"),  //
+	DAO("../dao/"),  //
 	WEBAPP("../webapp/"),  //
 	FSM("../stat/");
 
