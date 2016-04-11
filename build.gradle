@@ -137,6 +137,20 @@ project(':bricks-kvs:bricks-kvs-server'){
 	project(':bricks-kvs:bricks-kvs-client')
   }
 }
+project(':bricks-calendar:bricks-calendar-client'){
+  dependencies {
+    compile project(":bricks-lang"),
+    project(":bricks-core"),
+	'org.springframework:spring-web'
+  }
+}
+project(':bricks-calendar:bricks-calendar-server'){
+  dependencies {
+    compile project(":bricks-lang"),
+    project(":bricks-core"),
+	project(':bricks-calendar:bricks-calendar-client')
+  }
+}
 project(':bricks-kvs:bricks-kvs-client'){
   dependencies {
     compile project(":bricks-lang"),
