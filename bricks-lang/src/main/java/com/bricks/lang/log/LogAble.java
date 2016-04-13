@@ -27,10 +27,6 @@ public interface LogAble {
 		return loggers.get(name);
 	}
 
-	default Logger logger() {
-		return log();
-	}
-
 	default Logger log() {
 		return getLogger(this.getClass().getName());
 	}

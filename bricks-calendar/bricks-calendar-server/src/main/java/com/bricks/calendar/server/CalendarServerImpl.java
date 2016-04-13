@@ -9,20 +9,27 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 
-import org.springframework.stereotype.Service;
-
-import com.bricks.core.schedule.SimpleScheduler;
+import com.bricks.core.event.Event;
+import com.bricks.core.event.EventBus;
+import com.bricks.core.event.EventSubscriber;
+import com.bricks.core.schedule.ann.Schedulable;
 import com.bricks.core.simpleservice.SimpleServiceServer;
+import com.bricks.lang.log.LogAble;
 
 /**
  * @author bricks <long1795@gmail.com>
  */
-@Service
-public class CalendarServerImpl implements SimpleServiceServer, CalendarServer, SimpleScheduler {
+@Schedulable
+public class CalendarServerImpl implements CalendarServer, SimpleServiceServer, LogAble {
 
+	@Value("${calendar.server.abnormal_date_file_path}")
 	private String abnormalDateFilePath;
+
+	@Value("${calendar.server.refresh_interval}")
+	private int interval = 60 * 60;
 
 	private static final List<Date> abnormalDateCache = new ArrayList<>();
 
@@ -33,9 +40,12 @@ public class CalendarServerImpl implements SimpleServiceServer, CalendarServer, 
 		return isWorkday && !abnormalDateCache.contains(d);
 	}
 
-	@PostConstruct
-	public void init() {
-		schedule(() -> refresh(), 60 * 60);
+	@Schedulable(name = "refresh-abnormal-date-task")
+	public void refreshAndNotify() {
+		refresh();
+		Event event = new Event(EVENT_TYPE_CACHE_REFRESHED);
+		event.addContext(EVENT_KEY_CACHE_REFRESHED, abnormalDateCache);
+		EventBus.publishEvent(event);
 	}
 
 	private void refresh() {
@@ -45,7 +55,7 @@ public class CalendarServerImpl implements SimpleServiceServer, CalendarServer, 
 			return;
 		}
 		if (!f.exists() || !f.isFile()) {
-			log().warn("File[{}] not found!!!", abnormalDateFilePath);
+			log().warn("File[{}] not found!!!", f.getAbsolutePath());
 			return;
 		}
 		try {
@@ -72,6 +82,50 @@ public class CalendarServerImpl implements SimpleServiceServer, CalendarServer, 
 		} catch (Throwable t) {
 			log().error("Error when parsing abnormal date file : " + abnormalDateFilePath, t);
 		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.bricks.lang.log.LogAble#log()
+	 */
+	@Override
+	public Logger log() {
+		// TODO Auto-generated method stub
+		return SimpleServiceServer.super.log();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.bricks.lang.log.LogAble#err(java.lang.Throwable)
+	 */
+	@Override
+	public void err(Throwable t) {
+		// TODO Auto-generated method stub
+		SimpleServiceServer.super.err(t);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.bricks.core.simpleservice.SimpleServiceServer#registLocalSubscriber(java.lang.String, com.bricks.core.event.EventSubscriber)
+	 */
+	@Override
+	public void registLocalSubscriber(String eventType, EventSubscriber subscriber) {
+		// TODO Auto-generated method stub
+		SimpleServiceServer.super.registLocalSubscriber(eventType, subscriber);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.bricks.core.simpleservice.SimpleServiceServer#registRemoteSubscriber(java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public void registRemoteSubscriber(String eventType, String subscriberClassName, String subscriberUrl) {
+		// TODO Auto-generated method stub
+		SimpleServiceServer.super.registRemoteSubscriber(eventType, subscriberClassName, subscriberUrl);
 	}
 
 }

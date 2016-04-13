@@ -15,6 +15,12 @@ public class Event extends BaseObject {
 
 	protected Map<String, Object> eventContext;
 
+	public Event() {}
+
+	public Event(String eventType) {
+		this.eventType = eventType;
+	}
+
 	public String getEventType() {
 		return eventType;
 	}
@@ -25,6 +31,13 @@ public class Event extends BaseObject {
 
 	public Map<String, Object> getEventContext() {
 		return eventContext;
+	}
+
+	public Object getCtxVal(String key) {
+		if (eventContext == null) {
+			return null;
+		}
+		return eventContext.get(key);
 	}
 
 	public void setEventContext(Map<String, Object> eventContext) {
