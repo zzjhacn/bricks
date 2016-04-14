@@ -22,7 +22,7 @@ public class EventBus {
 		register.get(eventType).add(subscriber);
 	}
 
-	public static final void publishEvent(final Event event) {
+	public static final void broadcast(final Event event) {
 		if (register.containsKey(event.getEventType())) {
 			register.get(event.getEventType()).forEach(subscriber -> {
 				subscriber.handle(event);

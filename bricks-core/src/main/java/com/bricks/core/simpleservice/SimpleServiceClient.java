@@ -2,6 +2,9 @@ package com.bricks.core.simpleservice;
 
 import javax.annotation.PostConstruct;
 
+import com.alibaba.dubbo.config.ApplicationConfig;
+import com.alibaba.dubbo.config.RegistryConfig;
+import com.bricks.core.SpringCtxHolder;
 import com.bricks.core.event.Event;
 import com.bricks.core.event.EventSubscriber;
 import com.bricks.lang.log.LogAble;
@@ -17,11 +20,14 @@ public abstract class SimpleServiceClient implements EventSubscriber, LogAble {
 
 	private SimpleServiceServer simpleServiceServer;
 
-	private String eventNotifyUrl;
-
 	@PostConstruct
 	public void init() {
-		simpleServiceServer.registRemoteSubscriber(eventType(), getClass().getName(), eventNotifyUrl);
+		new Thread(() -> {
+			try {
+				Thread.sleep(1000);
+			} catch (Throwable e) {}
+			simpleServiceServer.registDubboSubscriber(eventType(), SpringCtxHolder.getBean(ApplicationConfig.class), SpringCtxHolder.getBean(RegistryConfig.class));
+		}).start();
 	}
 
 	/*

@@ -51,13 +51,21 @@ public class SimpleScheduler implements LogAble, ApplicationContextAware {
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		Map<String, Object> beans = applicationContext.getBeansWithAnnotation(Schedulable.class);
+		log().info("[{}] beans is annotation by Schedulable.class, Start to configuration schedule for these beans...", beans.size());
+
 		beans.forEach((k, v) -> {
 			Class<?> clazz = v.getClass();
 			Arrays.asList(clazz.getDeclaredMethods()).forEach(m -> {
-				if (m.isAccessible() && m.isAnnotationPresent(Schedulable.class)) {
+				if (m.isAnnotationPresent(Schedulable.class)) {
 					Schedulable schedulable = m.getAnnotation(Schedulable.class);
 					String name = "".equals(schedulable.name()) ? m.toString() : schedulable.name();
 					int interval = schedulable.interval();
+					String intervalStr = System.getProperty("simple.schedule." + name + ".interval");
+					try {
+						if (intervalStr != null) {
+							interval = Integer.valueOf(intervalStr);
+						}
+					} catch (Throwable e) {}
 					TimeUnit timeUnit = schedulable.timeUnit();
 					regist(name, () -> {
 						try {

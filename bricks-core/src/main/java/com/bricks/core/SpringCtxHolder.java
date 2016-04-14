@@ -3,12 +3,10 @@ package com.bricks.core;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.stereotype.Service;
 
 /**
  * @author bricks <long1795@gmail.com>
  */
-@Service
 public class SpringCtxHolder implements ApplicationContextAware {
 
 	private static ApplicationContext ctx;
@@ -31,6 +29,10 @@ public class SpringCtxHolder implements ApplicationContextAware {
 
 	public static ApplicationContext getCtx() {
 		return ctx;
+	}
+
+	public static <T> T getBean(Class<T> clazz) {
+		return ctx.getBean(clazz);
 	}
 
 }

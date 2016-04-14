@@ -2,6 +2,9 @@ package com.bricks.core.simpleservice;
 
 import java.util.Arrays;
 
+import com.alibaba.dubbo.config.ApplicationConfig;
+import com.alibaba.dubbo.config.RegistryConfig;
+import com.alibaba.dubbo.config.spring.ReferenceBean;
 import com.bricks.core.SpringCtxHolder;
 import com.bricks.core.event.Event;
 import com.bricks.core.event.EventBus;
@@ -15,6 +18,20 @@ public interface SimpleServiceServer extends LogAble {
 
 	default void registLocalSubscriber(final String eventType, final EventSubscriber subscriber) {
 		EventBus.subscribe(eventType, subscriber);
+	}
+
+	default void registDubboSubscriber(final String eventType, final ApplicationConfig dubboApplication, final RegistryConfig dubboRegistry) {
+		log().warn("Registing dubbo subscriber for event type[{}].", eventType);
+		ReferenceBean<EventSubscriber> ref = new ReferenceBean<>();
+		ref.setApplication(dubboApplication);
+		ref.setRegistry(dubboRegistry);
+		ref.setInterface(EventSubscriber.class);
+		try {
+			log().info("[{}]", ref.getObject());
+			EventBus.subscribe(eventType, (EventSubscriber) ref.getObject());
+		} catch (Exception e) {
+			err(e);
+		}
 	}
 
 	default void registRemoteSubscriber(final String eventType, final String subscriberClassName, final String subscriberUrl) {

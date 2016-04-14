@@ -69,16 +69,19 @@ subprojects {
   
   configurations {
 	  //compile.exclude module: 'commons'
-    all*.exclude module: 'log4j'
-    all*.exclude group: 'org.slf4j'
+//    all*.exclude module: 'log4j'
+//    all*.exclude group: 'org.slf4j'
   }
   
   dependencies {
-      compile 'ch.qos.logback:logback-classic:1.1.3',
-        'ch.qos.logback:logback-core:1.1.3',
-        'org.aspectj:aspectjrt',
+      compile 'org.aspectj:aspectjrt',
         'org.aspectj:aspectjtools',
-        'org.springframework:spring-core'
+        'org.springframework:spring-core',
+		'log4j:log4j:1.2.17',
+		'org.slf4j:slf4j-api:1.7.21',
+		'org.slf4j:slf4j-log4j12:1.7.21'
+//		'ch.qos.logback:logback-classic:1.1.3',
+//		'ch.qos.logback:logback-core:1.1.3',
 
       testCompile 'junit:junit:4.11',
         'org.springframework:spring-test',
@@ -105,6 +108,8 @@ project(':bricks-utils'){
 project(':bricks-core'){
   dependencies {
     compile project(":bricks-utils"),
+	'org.javassist:javassist:3.20.0-GA',
+	'com.alibaba:dubbo:2.5.4-SNAPSHOT',
 	  'org.springframework:spring-context',
 	  'org.springframework:spring-aop',
 	  'org.springframework:spring-aspects'
@@ -148,8 +153,8 @@ project(':bricks-calendar:bricks-calendar-client'){
     compile project(":bricks-core"),
 	'org.springframework:spring-web',
 	'com.github.sgroschupf:zkclient:0.1',
+	'org.javassist:javassist:3.20.0-GA',
 	'com.alibaba:dubbo:2.5.4-SNAPSHOT'
-	//'org.javassist:javassist:3.20.0-GA',
 	//'org.ow2.asm:asm:5.1',
 	//'cglib:cglib-nodep:3.2.2'
 //	compile ('com.alibaba:dubbo:2.5.4-SNAPSHOT'){
@@ -160,7 +165,8 @@ project(':bricks-calendar:bricks-calendar-client'){
 }
 project(':bricks-calendar:bricks-calendar-server'){
   dependencies {
-    compile project(':bricks-calendar:bricks-calendar-client')
+    compile project(':bricks-calendar:bricks-calendar-client'),
+	'org.javassist:javassist:3.20.0-GA'
   }
 }
 project(':bricks-facade'){

@@ -15,6 +15,9 @@
 	<logger name="org.I0Itec.zkclient" additivity="false">
 		<level value="warn" />
 	</logger>
+	<logger name="com.alibaba.dubbo" additivity="false">
+		<level value="warn" />
+	</logger>
 	<root>
 		<level value="debug" />
 		<appender-ref ref="STDOUT" />
