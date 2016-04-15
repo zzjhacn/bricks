@@ -9,14 +9,15 @@
 
 	<dubbo:application logger="log4j" name="micor-service-calendar-client" />
 	<dubbo:registry address="zookeeper://127.0.0.1:2181" />
+	<dubbo:protocol name="dubbo" port="20880" />
 	
 	<bean class="com.bricks.core.SpringCtxHolder" />
 
 	<bean id="calendarClient" class="com.bricks.calendar.client.CalendarClientImpl" p:simpleServiceServer-ref="calendarService" />
 
-	<dubbo:service interface="com.bricks.core.event.EventSubscriber" ref="calendarClient" />
+	<dubbo:service interface="com.bricks.core.event.EventHandler" ref="calendarClient" />
 	
 	<dubbo:reference id="calendarServer" interface="com.bricks.calendar.server.CalendarServer" />
-	<dubbo:reference id="calendarService" interface="com.bricks.core.simpleservice.SimpleServiceServer" />
+	<dubbo:reference id="calendarService" interface="com.bricks.core.simpleservice.DubboBasedServiceServer" />
 
 </beans>

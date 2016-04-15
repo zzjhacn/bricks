@@ -14,6 +14,19 @@ public class EventBus {
 
 	public final static ConcurrentHashMap<String, List<EventSubscriber>> register = new ConcurrentHashMap<>();
 
+	public static final void unsubscribe(final String eventType, final String subscriberUid) {
+		if (register.get(eventType) == null) {
+			slog().warn("No subscribe exists for event type[{}].", eventType);
+			return;
+		}
+		for (EventSubscriber es : register.get(eventType)) {
+			if (es.get__id().equals(subscriberUid)) {
+				register.remove(es);
+				slog().info("Subscriber[{}] unsubscribe for event[{}].", subscriberUid, eventType);
+			}
+		}
+	}
+
 	public static final void subscribe(final String eventType, final EventSubscriber subscriber) {
 		if (!register.containsKey(eventType)) {
 			register.put(eventType, new ArrayList<>());

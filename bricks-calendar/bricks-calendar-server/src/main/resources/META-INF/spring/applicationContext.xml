@@ -5,6 +5,7 @@
 
 	<dubbo:application logger="log4j" name="micor-service-calendar-server" />
 	<dubbo:registry address="zookeeper://127.0.0.1:2181" />
+	<dubbo:protocol name="dubbo" port="20881" />
 
 	<bean class="com.bricks.core.schedule.SimpleScheduler" />
 	<bean class="com.bricks.core.SpringCtxHolder" />
@@ -12,6 +13,6 @@
 	<bean id="calendarService" class="com.bricks.calendar.server.CalendarServerImpl" />
 
 	<dubbo:service interface="com.bricks.calendar.server.CalendarServer" ref="calendarService" />
-	<dubbo:service interface="com.bricks.core.simpleservice.SimpleServiceServer" ref="calendarService" />
+	<dubbo:service interface="com.bricks.core.simpleservice.DubboBasedServiceServer" ref="calendarService" />
 
 </beans>

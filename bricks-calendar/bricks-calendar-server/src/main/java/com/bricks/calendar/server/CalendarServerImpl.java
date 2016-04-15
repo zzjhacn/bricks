@@ -5,24 +5,23 @@ import java.io.File;
 import java.io.FileReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
 
-import com.alibaba.dubbo.rpc.RpcContext;
+import com.bricks.calendar.CalendarHelper;
 import com.bricks.core.event.Event;
 import com.bricks.core.event.EventBus;
 import com.bricks.core.schedule.ann.Schedulable;
-import com.bricks.core.simpleservice.SimpleServiceServer;
+import com.bricks.core.simpleservice.DubboBasedServiceServer;
 import com.bricks.lang.log.LogAble;
 
 /**
  * @author bricks <long1795@gmail.com>
  */
 @Schedulable
-public class CalendarServerImpl implements CalendarServer, SimpleServiceServer, LogAble {
+public class CalendarServerImpl implements CalendarServer, DubboBasedServiceServer, LogAble {
 
 	@Value("${calendar.server.abnormal_date_file_path}")
 	private String abnormalDateFilePath;
@@ -30,10 +29,7 @@ public class CalendarServerImpl implements CalendarServer, SimpleServiceServer, 
 	private static final List<Date> abnormalDateCache = new ArrayList<>();
 
 	public boolean isWorkday(Date d) {
-		Calendar c = Calendar.getInstance();
-		c.setTime(d);
-		boolean isWorkday = c.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY || c.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY;
-		return isWorkday && !abnormalDateCache.contains(d);
+		return CalendarHelper.isWorkday(d) && !abnormalDateCache.contains(d);
 	}
 
 	@Schedulable(name = "refresh-abnormal-date-task")
@@ -47,7 +43,7 @@ public class CalendarServerImpl implements CalendarServer, SimpleServiceServer, 
 	private void refresh() {
 		File f = new File(abnormalDateFilePath);
 		if (abnormalDateFilePath == null) {
-			log().warn("[{} is not set!!!", abnormalDateFilePath);
+			log().warn("[abnormalDateFilePath] is not set!!!");
 			return;
 		}
 		if (!f.exists() || !f.isFile()) {
@@ -79,16 +75,4 @@ public class CalendarServerImpl implements CalendarServer, SimpleServiceServer, 
 			log().error("Error when parsing abnormal date file : " + abnormalDateFilePath, t);
 		}
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.bricks.core.simpleservice.SimpleServiceServer#registRemoteSubscriber(java.lang.String, java.lang.String, java.lang.String)
-	 */
-	@Override
-	public void registRemoteSubscriber(String eventType, String subscriberClassName, String subscriberUrl) {
-		log().info("processing with client [{}]", RpcContext.getContext().getRemoteAddress());
-		SimpleServiceServer.super.registRemoteSubscriber(eventType, subscriberClassName, subscriberUrl);
-	}
-
 }

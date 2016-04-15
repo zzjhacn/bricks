@@ -1,20 +1,20 @@
 package com.bricks.calendar.client;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
 
+import com.bricks.calendar.CalendarHelper;
 import com.bricks.calendar.server.CalendarServer;
 import com.bricks.core.event.Event;
-import com.bricks.core.simpleservice.SimpleServiceClient;
+import com.bricks.core.simpleservice.DubboBasedServiceClient;
 
 /**
  * @author bricks <long1795@gmail.com>
  */
-public class CalendarClientImpl extends SimpleServiceClient implements CalendarClient {
+public class CalendarClientImpl extends DubboBasedServiceClient implements CalendarClient {
 
 	@Resource
 	private CalendarServer server;
@@ -32,16 +32,13 @@ public class CalendarClientImpl extends SimpleServiceClient implements CalendarC
 			return server.isWorkday(d);
 		}
 
-		Calendar c = Calendar.getInstance();
-		c.setTime(d);
-		boolean isWorkday = c.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY || c.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY;
-		return isWorkday && !abnormalDateCache.contains(d);
+		return CalendarHelper.isWorkday(d) && !abnormalDateCache.contains(d);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.bricks.core.simpleservice.SimpleServiceClient#eventType()
+	 * @see com.bricks.core.simpleservice.DubboBasedServiceClient#eventType()
 	 */
 	@Override
 	protected String eventType() {
@@ -51,7 +48,7 @@ public class CalendarClientImpl extends SimpleServiceClient implements CalendarC
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.bricks.core.simpleservice.SimpleServiceClient#handleImpl(com.bricks.core.event.Event)
+	 * @see com.bricks.core.simpleservice.DubboBasedServiceClient#handleImpl(com.bricks.core.event.Event)
 	 */
 	@Override
 	protected void handleImpl(Event event) {

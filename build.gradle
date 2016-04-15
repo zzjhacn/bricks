@@ -1,195 +1,172 @@
 allprojects {
-  apply plugin: 'java'
-  /*apply plugin: 'eclipse'*/
-  /*apply plugin: 'maven'*/
+	apply plugin: 'java'
+	/*apply plugin: 'eclipse'*/
+	/*apply plugin: 'maven'*/
 
-  sourceCompatibility = 1.8
-  targetCompatibility = 1.8
-  version = '1.0.00-SNAPSHOT'
+	sourceCompatibility = 1.8
+	targetCompatibility = 1.8
+	version = '1.0.00-SNAPSHOT'
 }
 group = 'com.bricks'
-[compileJava,compileTestJava,javadoc]*.options*.encoding = "UTF-8"
+[compileJava, compileTestJava, javadoc]*.options*.encoding = "UTF-8"
 /*configure(subprojects.findAll {it.name.contains('war')}) {*/
 configure(subprojects.findAll {}) {
-  group = 'com.bricks.'+it.parent.name
+	group = 'com.bricks.'+it.parent.name
 }
-
+ext['javassist.version'] = '3.20.0-GA'
+ext{
+	version_dubbo = '2.5.4'
+	version_thymeleaf = '2.1.4.RELEASE'//3.0.0.BETA02
+}
 buildscript {
-  repositories {
-    mavenCentral()
-    mavenLocal()
-    jcenter()
+	repositories {
+		mavenCentral()
+		mavenLocal()
+		jcenter()
 
-    /*maven {
-      url "https://plugins.gradle.org/m2/"
-      // url "local/path/to/mvn-repo"
-      // Look for POMs and artifacts, such as JARs, here
-      // url "http://repository.jboss.org/maven2/"
-      // Look for artifacts here if not found at the above location
-      // artifactUrls "http://repo.mycompany.com/jars"
-      // artifactUrls "http://repo.mycompany.com/jars2"
-    }*/
-  }
-  dependencies {
-    classpath 'io.spring.gradle:dependency-management-plugin:0.5.6.RELEASE'
-    classpath 'org.akhikhl.gretty:gretty:+'
-  }
+		/*maven {
+		 url "https://plugins.gradle.org/m2/"
+		 // url "local/path/to/mvn-repo"
+		 // Look for POMs and artifacts, such as JARs, here
+		 // url "http://repository.jboss.org/maven2/"
+		 // Look for artifacts here if not found at the above location
+		 // artifactUrls "http://repo.mycompany.com/jars"
+		 // artifactUrls "http://repo.mycompany.com/jars2"
+		 }*/
+	}
+	dependencies {
+		classpath 'io.spring.gradle:dependency-management-plugin:0.5.6.RELEASE'
+		classpath 'org.akhikhl.gretty:gretty:+'
+	}
 }
 
 subprojects {
-  repositories {
-	maven{
-      url "file://D:/repo"
-    }
-	mavenLocal()
-    mavenCentral()
-    jcenter()
-  }
+	repositories {
+		maven{ url "file://D:/repo" }
+		mavenLocal()
+		mavenCentral()
+		jcenter()
+	}
 
-  processResources{
-    /* 从'$projectDir/src/main/'目录下复制文件到'WEB-INF/classes'目录下覆盖原有同名文件*/
-    from("$projectDir/src/main/java/","$projectDir/src/main/resources/")
-    include '**/*.xml'
-  }
+	processResources{
+		/* 从'$projectDir/src/main/'目录下复制文件到'WEB-INF/classes'目录下覆盖原有同名文件*/
+		from("$projectDir/src/main/java/","$projectDir/src/main/resources/")
+		include '**/*.xml'
+	}
 
-  apply plugin: 'io.spring.dependency-management'
+	apply plugin: 'io.spring.dependency-management'
 
-  dependencyManagement {
-      imports {
-          mavenBom 'io.spring.platform:platform-bom:2.0.3.RELEASE'
-      }
-  }
+	dependencyManagement { imports { mavenBom 'io.spring.platform:platform-bom:2.0.3.RELEASE'
+		} }
 
-  jar {
-    manifest.attributes provider: 'gradle'
-    /*manifest {
-      attributes 'Main-Class': 'net.petrikainulainen.gradle.HelloWorld'
-    }*/
-  }
-  
-  configurations {
-	  //compile.exclude module: 'commons'
-//    all*.exclude module: 'log4j'
-//    all*.exclude group: 'org.slf4j'
-  }
-  
-  dependencies {
-      compile 'org.aspectj:aspectjrt',
-        'org.aspectj:aspectjtools',
-        'org.springframework:spring-core',
-		'log4j:log4j:1.2.17',
-		'org.slf4j:slf4j-api:1.7.21',
-		'org.slf4j:slf4j-log4j12:1.7.21'
-//		'ch.qos.logback:logback-classic:1.1.3',
-//		'ch.qos.logback:logback-core:1.1.3',
+	jar {
+		manifest.attributes provider: 'gradle'
+		/*manifest {
+		 attributes 'Main-Class': 'net.petrikainulainen.gradle.HelloWorld'
+		 }*/
+	}
 
-      testCompile 'junit:junit:4.11',
-        'org.springframework:spring-test',
-        //'org.apache.tomcat.embed:tomcat-embed-core',
-        //'org.apache.tomcat:tomcat-dbcp',
-        //'org.apache.tomcat.embed:tomcat-embed-jasper',
-        'org.jmock:jmock-junit4:2.8.1'
-  }
+	configurations {
+		//compile.exclude module: 'commons'
+		//    all*.exclude module: 'log4j'
+		//    all*.exclude group: 'org.slf4j'
+	}
 
-  /*
-  task copyLicense(type: Copy) {
-      from "LICENSE"
-      into "$buildDir"
-  }
-  */
+	dependencies {
+		compile 'org.aspectj:aspectjrt',
+				'org.aspectj:aspectjtools',
+				'org.springframework:spring-core',
+				'log4j:log4j:1.2.17',
+				'org.slf4j:slf4j-api:1.7.21',
+				'org.slf4j:slf4j-log4j12:1.7.21'
+		//		'ch.qos.logback:logback-classic:1.1.3',
+		//		'ch.qos.logback:logback-core:1.1.3',
+
+		testCompile 'junit:junit:4.11',
+				'org.springframework:spring-test',
+				//'org.apache.tomcat.embed:tomcat-embed-core',
+				//'org.apache.tomcat:tomcat-dbcp',
+				//'org.apache.tomcat.embed:tomcat-embed-jasper',
+				'org.jmock:jmock-junit4:2.8.1'
+	}
+
+	/*
+	 task copyLicense(type: Copy) {
+	 from "LICENSE"
+	 into "$buildDir"
+	 }
+	 */
 }
 project(':bricks-utils'){
-  dependencies {
-    compile project(":bricks-lang"),
-      "org.apache.velocity:velocity:1.7",
-	  "com.alibaba:fastjson:1.2.8"
-  }
+	dependencies {
+		compile project(":bricks-lang"),
+				"org.apache.velocity:velocity:1.7",
+				"com.alibaba:fastjson:1.2.8"
+	}
 }
 project(':bricks-core'){
-  dependencies {
-    compile project(":bricks-utils"),
-	'org.javassist:javassist:3.20.0-GA',
-	'com.alibaba:dubbo:2.5.4-SNAPSHOT',
-	  'org.springframework:spring-context',
-	  'org.springframework:spring-aop',
-	  'org.springframework:spring-aspects'
-  }
+	dependencies {
+		compile project(":bricks-utils"),
+				'org.springframework:spring-context',
+				'org.springframework:spring-aop',
+				'org.springframework:spring-aspects',
+				'com.github.sgroschupf:zkclient:0.1'
+		compile ("com.alibaba:dubbo:$version_dubbo"){
+			//exclude group:"org.javassist",module:"javassist"
+		}
+	}
 }
 project(':bricks-dal:bricks-dal-common'){
-  dependencies {
-    compile  project(":bricks-core")
-  }
+	dependencies { compile  project(":bricks-core") }
 }
 project(':bricks-dal:bricks-dal-mybatis'){
-  dependencies {
-    compile project(":bricks-dal:bricks-dal-common"),
-      'org.mybatis:mybatis:3.3.1',
-      'org.mybatis:mybatis-spring:1.2.4',
-      'org.springframework:spring-tx',
-      //'org.springframework:spring-jdbc',
-      'org.springframework:spring-orm',
-      'commons-dbcp:commons-dbcp:1.4',
-      'javax.persistence:persistence-api:1.0'
-  }
+	dependencies {
+		compile project(":bricks-dal:bricks-dal-common"),
+				'org.mybatis:mybatis:3.3.1',
+				'org.mybatis:mybatis-spring:1.2.4',
+				'org.springframework:spring-tx',
+				'org.springframework:spring-orm',
+				'commons-dbcp:commons-dbcp:1.4',
+				'javax.persistence:persistence-api:1.0'
+	}
 }
 project(':bricks-helper'){
-  dependencies {
-    compile project(":bricks-core")
-  }
+	dependencies { compile project(":bricks-core") }
 }
 project(':bricks-kvs:bricks-kvs-client'){
-  dependencies {
-    compile project(":bricks-core"),
-	'org.springframework:spring-web'
-  }
+	dependencies {
+		compile project(":bricks-core"),
+				'org.springframework:spring-web'
+	}
 }
 project(':bricks-kvs:bricks-kvs-server'){
-  dependencies {
-    compile project(':bricks-kvs:bricks-kvs-client')
-  }
+	dependencies { compile project(':bricks-kvs:bricks-kvs-client') }
 }
 project(':bricks-calendar:bricks-calendar-client'){
-  dependencies {
-    compile project(":bricks-core"),
-	'org.springframework:spring-web',
-	'com.github.sgroschupf:zkclient:0.1',
-	'org.javassist:javassist:3.20.0-GA',
-	'com.alibaba:dubbo:2.5.4-SNAPSHOT'
-	//'org.ow2.asm:asm:5.1',
-	//'cglib:cglib-nodep:3.2.2'
-//	compile ('com.alibaba:dubbo:2.5.4-SNAPSHOT'){
-//		exclude module:'log4j'
-//    }
-	//all*.exclude module: 'log4j'
-  }
+	dependencies {
+		compile project(":bricks-core"),
+				'org.springframework:spring-web'
+	}
 }
 project(':bricks-calendar:bricks-calendar-server'){
-  dependencies {
-    compile project(':bricks-calendar:bricks-calendar-client'),
-	'org.javassist:javassist:3.20.0-GA'
-  }
+	dependencies { compile project(':bricks-calendar:bricks-calendar-client') }
 }
 project(':bricks-facade'){
-  ext{
-    version_thymeleaf = '2.1.4.RELEASE'//3.0.0.BETA02
-  }
-  apply plugin: 'war'
-  apply plugin: 'org.akhikhl.gretty'
-  dependencies {
-    compile project(":bricks-helper"),
-      project(":bricks-dal:bricks-dal-mybatis"),
-      "org.thymeleaf:thymeleaf:$version_thymeleaf",
-      "org.thymeleaf:thymeleaf-spring4:$version_thymeleaf",
-      'org.springframework:spring-webmvc',
-      'org.springframework:spring-web',
-      'com.alibaba:druid:1.0.17',
-      /*'org.apache.derby:derby:10.12.1.1',*/
-      /*'org.apache.derby:derbyclient:10.12.1.1',*/
-      'org.hsqldb:hsqldb:2.3.3',
-      'commons-logging:commons-logging:1.2',
-      'javax.servlet:javax.servlet-api:3.1.0',
-      'javax.servlet.jsp:jsp-api:2.2.1-b03',
-      'com.fasterxml.jackson.core:jackson-databind:2.5.3',
-      'com.thoughtworks.xstream:xstream:1.4.7'
-  }
+	apply plugin: 'war'
+	apply plugin: 'org.akhikhl.gretty'
+	dependencies {
+		compile project(":bricks-helper"),
+				project(":bricks-dal:bricks-dal-mybatis"),
+				"org.thymeleaf:thymeleaf:$version_thymeleaf",
+				"org.thymeleaf:thymeleaf-spring4:$version_thymeleaf",
+				'org.springframework:spring-webmvc',
+				'org.springframework:spring-web',
+				'com.alibaba:druid:1.0.17',
+				'org.hsqldb:hsqldb:2.3.3',
+				'commons-logging:commons-logging:1.2',
+				'javax.servlet:javax.servlet-api:3.1.0',
+				'javax.servlet.jsp:jsp-api:2.2.1-b03',
+				'com.fasterxml.jackson.core:jackson-databind:2.5.3',
+				'com.thoughtworks.xstream:xstream:1.4.7'
+	}
 }

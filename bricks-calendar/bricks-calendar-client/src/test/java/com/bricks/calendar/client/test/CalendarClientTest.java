@@ -32,8 +32,7 @@ public class CalendarClientTest implements LogAble {
 		log().info("[{}} is workday? [{}]", DateFormatUtils.format(d, pattern), client.isWorkday(d));
 		d = new Date();
 		log().info("[{}} is workday? [{}]", DateFormatUtils.format(d, pattern), client.isWorkday(d));
-		while (true) {
-			Thread.sleep(10 * 1000);
-		}
+		
+		Thread.sleep(100 * 1000);
 	}
 }
