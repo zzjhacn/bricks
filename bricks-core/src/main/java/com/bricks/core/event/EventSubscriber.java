@@ -8,6 +8,7 @@ import com.bricks.lang.BaseObject;
 public class EventSubscriber extends BaseObject {
 	private static final long serialVersionUID = 1L;
 
+	private String id;
 	private String appName;
 	private boolean notifyEachNode;
 	private EventHandler handler;
@@ -51,5 +52,13 @@ public class EventSubscriber extends BaseObject {
 
 	public void setHandler(EventHandler handler) {
 		this.handler = handler;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 }

@@ -15,7 +15,7 @@ configure(subprojects.findAll {}) {
 }
 ext['javassist.version'] = '3.20.0-GA'
 ext{
-	version_dubbo = '2.5.4'
+	version_dubbo = '2.5.4-SNAPSHOT'
 	version_thymeleaf = '2.1.4.RELEASE'//3.0.0.BETA02
 }
 buildscript {
@@ -110,7 +110,8 @@ project(':bricks-core'){
 				'org.springframework:spring-context',
 				'org.springframework:spring-aop',
 				'org.springframework:spring-aspects',
-				'com.github.sgroschupf:zkclient:0.1'
+				'com.github.sgroschupf:zkclient:0.1',
+				'redis.clients:jedis:2.8.1'
 		compile ("com.alibaba:dubbo:$version_dubbo"){
 			//exclude group:"org.javassist",module:"javassist"
 		}

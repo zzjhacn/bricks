@@ -4,14 +4,12 @@ import java.util.Properties;
 
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 
-import com.bricks.kvs.KVStore;
-
 /**
  * @author bricks <long1795@gmail.com>
  */
 public class BricksPropertyPlaceholderConfigurer extends PropertyPlaceholderConfigurer {
 
-	private KVStore kvClient;
+	private KVClient kvClient;
 
 	/*
 	 * (non-Javadoc)
@@ -20,16 +18,17 @@ public class BricksPropertyPlaceholderConfigurer extends PropertyPlaceholderConf
 	 */
 	@Override
 	protected String resolvePlaceholder(String placeholder, Properties props) {
-
 		String result = super.resolvePlaceholder(placeholder, props);
 		if (result != null) {
 			return result;
 		}
-		result = kvClient.get(placeholder);
+		if (kvClient != null) {
+			result = kvClient.get(placeholder);
+		}
 		return result;
 	}
 
-	public void setKvClient(KVStore kvClient) {
+	public void setKvClient(KVClient kvClient) {
 		this.kvClient = kvClient;
 	}
 

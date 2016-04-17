@@ -1,8 +1,10 @@
 package com.bricks.core.event;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import static com.bricks.lang.log.LogAble.slog;
 
@@ -19,10 +21,12 @@ public class EventBus {
 			slog().warn("No subscribe exists for event type[{}].", eventType);
 			return;
 		}
-		for (EventSubscriber es : register.get(eventType)) {
-			if (es.get__id().equals(subscriberUid)) {
-				register.remove(es);
+		Iterator<EventSubscriber> it = register.get(eventType).iterator();
+		while (it.hasNext()) {
+			if (subscriberUid.equals(it.next().get__id())) {
+				it.remove();
 				slog().info("Subscriber[{}] unsubscribe for event[{}].", subscriberUid, eventType);
+				return;
 			}
 		}
 	}
@@ -36,10 +40,30 @@ public class EventBus {
 	}
 
 	public static final void broadcast(final Event event) {
+		final ConcurrentMap<String, String> report = new ConcurrentHashMap<>();
 		if (register.containsKey(event.getEventType())) {
 			register.get(event.getEventType()).forEach(subscriber -> {
-				subscriber.handle(event);
+				boolean notify = false;
+				if (subscriber.isNotifyEachNode()) {
+					subscriber.handle(event);
+					notify = true;
+				} else {
+					if (!report.containsValue(subscriber.getAppName())) {
+						subscriber.handle(event);
+						notify = true;
+					}
+				}
+				report.put(subscriber.getId() + "--" + subscriber.get__id() + "--" + notify, subscriber.getAppName());
 			});
 		}
+		if (report.isEmpty()) {
+			slog().info("None subscribers for event[{}]", event.toString());
+			return;
+		}
+		slog().info("---------- Event broadcast report (Event=[{}]) ----------", event.toString());
+		report.forEach((k, v) -> {
+			slog().info("Notified appname[{}] client[{}].", v, k);
+		});
+		slog().info("---------- end report ----------");
 	}
 }

@@ -5,6 +5,7 @@ import javax.annotation.PreDestroy;
 
 import com.alibaba.dubbo.config.ApplicationConfig;
 import com.alibaba.dubbo.config.ProtocolConfig;
+import com.alibaba.dubbo.rpc.RpcContext;
 import com.bricks.core.SpringCtxHolder;
 import com.bricks.core.event.Event;
 import com.bricks.core.event.EventHandler;
@@ -31,6 +32,7 @@ public abstract class DubboBasedServiceClient implements EventHandler, LogAble {
 				// 延迟一秒订阅事件（防止事件监听服务尚未启动导致出错）
 				Thread.sleep(1000);
 				subscriber = new EventSubscriber(SpringCtxHolder.getBean(ApplicationConfig.class).getName(), true);
+				subscriber.setId(RpcContext.getContext().getLocalAddressString());
 				simpleServiceServer.dubboSubscriber(eventType(), subscriber, SpringCtxHolder.getBean(ProtocolConfig.class).getPort());
 			} catch (Throwable e) {
 				err(e);

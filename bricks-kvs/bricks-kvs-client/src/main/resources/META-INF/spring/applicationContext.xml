@@ -5,19 +5,19 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
 		http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 	<context:annotation-config />
-	<context:component-scan base-package="com.bricks.calendar.client" />
+	<context:component-scan base-package="com.bricks.kvs.client" />
 
-	<dubbo:application logger="log4j" name="micor-service-calendar-client" />
+	<dubbo:application logger="log4j" name="micor-service-kvs-client" />
 	<dubbo:registry address="zookeeper://127.0.0.1:2181" />
-	<dubbo:protocol name="dubbo" port="20880" />
-	
+	<dubbo:protocol name="dubbo" port="20883" />
+
 	<bean class="com.bricks.core.SpringCtxHolder" />
 
-	<bean id="calendarClient" class="com.bricks.calendar.client.CalendarClientImpl" p:simpleServiceServer-ref="simpleServiceServer" />
+	<bean id="kvClient" class="com.bricks.kvs.client.KVClientImpl" p:scope="micor-service-kvs-client" p:simpleServiceServer-ref="simpleServiceServer" />
 
-	<dubbo:service interface="com.bricks.core.event.EventHandler" ref="calendarClient" />
-	
-	<dubbo:reference id="calendarServer" interface="com.bricks.calendar.server.CalendarServer" />
+	<dubbo:service interface="com.bricks.core.event.EventHandler" ref="kvClient" />
+
+	<dubbo:reference id="kvStore" interface="com.bricks.kvs.KVStore" />
 	<dubbo:reference id="simpleServiceServer" interface="com.bricks.core.simpleservice.DubboBasedServiceServer" />
 
 </beans>
