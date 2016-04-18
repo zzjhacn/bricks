@@ -2,8 +2,11 @@ package com.bricks.kvs.server;
 
 import java.util.HashMap;
 
+import javax.annotation.Resource;
+
 import com.bricks.core.event.Event;
 import com.bricks.core.event.EventBus;
+import com.bricks.core.redis.RedisService;
 import com.bricks.core.schedule.ann.Schedulable;
 import com.bricks.core.simpleservice.DubboBasedServiceServer;
 import com.bricks.kvs.KVStore;
@@ -14,6 +17,8 @@ import com.bricks.lang.log.LogAble;
  */
 @Schedulable
 public class KVStoreImpl implements KVStore, DubboBasedServiceServer, LogAble {
+	@Resource
+	private RedisService redis;
 
 	/*
 	 * (non-Javadoc)
@@ -22,7 +27,7 @@ public class KVStoreImpl implements KVStore, DubboBasedServiceServer, LogAble {
 	 */
 	@Override
 	public String get(String scope, String key) {
-		return null;
+		return redis.getJedis().get(scope + "-" + key);
 	}
 
 	@Schedulable(name = "refresh-kv-map-task")

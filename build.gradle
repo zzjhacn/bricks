@@ -111,7 +111,10 @@ project(':bricks-core'){
 				'org.springframework:spring-aop',
 				'org.springframework:spring-aspects',
 				'com.github.sgroschupf:zkclient:0.1',
-				'redis.clients:jedis:2.8.1'
+				'redis.clients:jedis:2.8.1',
+				'org.apache.httpcomponents:httpclient:4.1.2',
+				'javax.servlet:javax.servlet-api:3.1.0',
+				'org.mortbay.jetty:jetty:6.1.26'
 		compile ("com.alibaba:dubbo:$version_dubbo"){
 			//exclude group:"org.javassist",module:"javassist"
 		}
@@ -146,6 +149,7 @@ project(':bricks-kvs:bricks-kvs-server'){
 project(':bricks-calendar:bricks-calendar-client'){
 	dependencies {
 		compile project(":bricks-core"),
+				project(':bricks-kvs:bricks-kvs-client'),
 				'org.springframework:spring-web'
 	}
 }
