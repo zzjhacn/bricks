@@ -4,10 +4,12 @@ import java.util.Properties;
 
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 
+import com.bricks.lang.log.LogAble;
+
 /**
  * @author bricks <long1795@gmail.com>
  */
-public class BricksPropertyPlaceholderConfigurer extends PropertyPlaceholderConfigurer {
+public class BricksPropertyPlaceholderConfigurer extends PropertyPlaceholderConfigurer implements LogAble {
 
 	private KVClient kvClient;
 
@@ -24,6 +26,8 @@ public class BricksPropertyPlaceholderConfigurer extends PropertyPlaceholderConf
 		}
 		if (kvClient != null) {
 			result = kvClient.get(placeholder);
+		}else{
+			log().error("----------------------------null kv client---------------------------------");
 		}
 		return result;
 	}
