@@ -16,7 +16,8 @@ import com.bricks.lang.log.LogAble;
  * @author bricks <long1795@gmail.com>
  */
 @Schedulable
-public class KVStoreImpl implements KVStore, DubboBasedServiceServer, LogAble {
+public class KVStoreRedisImpl implements KVStore, DubboBasedServiceServer, LogAble {
+	
 	@Resource
 	private RedisService redis;
 

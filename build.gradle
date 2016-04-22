@@ -15,7 +15,7 @@ configure(subprojects.findAll {}) {
 }
 ext['javassist.version'] = '3.20.0-GA'
 ext{
-	version_dubbo = '2.5.4-SNAPSHOT'
+	version_dubbo = '2.8.4'//2.5.4-SNAPSHOT
 	version_thymeleaf = '2.1.4.RELEASE'//3.0.0.BETA02
 }
 buildscript {
@@ -56,8 +56,7 @@ subprojects {
 
 	apply plugin: 'io.spring.dependency-management'
 
-	dependencyManagement { imports { mavenBom 'io.spring.platform:platform-bom:2.0.3.RELEASE'
-		} }
+	dependencyManagement { imports { mavenBom 'io.spring.platform:platform-bom:2.0.3.RELEASE' } }
 
 	jar {
 		manifest.attributes provider: 'gradle'
@@ -76,6 +75,7 @@ subprojects {
 		compile 'org.aspectj:aspectjrt',
 				'org.aspectj:aspectjtools',
 				'org.springframework:spring-core',
+				'commons-logging:commons-logging:1.2',
 				'log4j:log4j:1.2.17',
 				'org.slf4j:slf4j-api:1.7.21',
 				'org.slf4j:slf4j-log4j12:1.7.21'
@@ -114,7 +114,10 @@ project(':bricks-core'){
 				'redis.clients:jedis:2.8.1',
 				'org.apache.httpcomponents:httpclient:4.1.2',
 				'javax.servlet:javax.servlet-api:3.1.0',
-				'org.mortbay.jetty:jetty:6.1.26'
+				'org.mortbay.jetty:jetty:6.1.26',
+				'com.caucho:hessian:4.0.38',
+				'org.apache.cxf:cxf-rt-frontend-simple:3.1.6',//3.1.6
+				'org.apache.cxf:cxf-rt-transports-http:3.1.6'//2.6.1
 		compile ("com.alibaba:dubbo:$version_dubbo"){
 			//exclude group:"org.javassist",module:"javassist"
 		}
@@ -168,7 +171,6 @@ project(':bricks-facade'){
 				'org.springframework:spring-web',
 				'com.alibaba:druid:1.0.17',
 				'org.hsqldb:hsqldb:2.3.3',
-				'commons-logging:commons-logging:1.2',
 				'javax.servlet:javax.servlet-api:3.1.0',
 				'javax.servlet.jsp:jsp-api:2.2.1-b03',
 				'com.fasterxml.jackson.core:jackson-databind:2.5.3',

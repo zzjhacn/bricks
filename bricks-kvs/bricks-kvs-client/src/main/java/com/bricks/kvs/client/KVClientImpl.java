@@ -3,8 +3,7 @@ package com.bricks.kvs.client;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.annotation.Resource;
-
+import com.bricks.core.dubbo.DubboReferHelper;
 import com.bricks.core.event.Event;
 import com.bricks.core.simpleservice.DubboBasedServiceClient;
 import com.bricks.kvs.KVStore;
@@ -14,10 +13,10 @@ import com.bricks.kvs.KVStore;
  */
 public class KVClientImpl extends DubboBasedServiceClient implements KVClient {
 
-	@Resource
 	private KVStore kvStore;
 
 	private String scope;
+	private String registyAddr;
 
 	protected static final ConcurrentHashMap<String, String> cache = new ConcurrentHashMap<>();
 
@@ -31,9 +30,15 @@ public class KVClientImpl extends DubboBasedServiceClient implements KVClient {
 		if (cache.containsKey(key)) {
 			return cache.get(key);
 		}
-		String result = kvStore.get(scope, key);
-		cache.put(key, result);
-		return result;
+		if (kvStore == null) {
+			kvStore = DubboReferHelper.refer(KVStore.class, registyAddr);
+		}
+		if (kvStore != null) {
+			String result = kvStore.get(scope, key);
+			cache.put(key, result);
+			return result;
+		}
+		return null;
 	}
 
 	/*
@@ -78,6 +83,10 @@ public class KVClientImpl extends DubboBasedServiceClient implements KVClient {
 
 	public void setScope(String scope) {
 		this.scope = scope;
+	}
+
+	public void setRegistyAddr(String registyAddr) {
+		this.registyAddr = registyAddr;
 	}
 
 }

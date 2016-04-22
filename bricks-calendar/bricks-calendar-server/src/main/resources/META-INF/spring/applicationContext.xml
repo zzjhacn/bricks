@@ -4,15 +4,21 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
-	<bean class="com.bricks.kvs.client.BricksPropertyPlaceholderConfigurer" p:kvClient-ref="kvClient">
+	<bean class="com.bricks.kvs.client.BricksPropertyPlaceholderConfigurer" >
 		<property name="location" value="classpath:META-INF/spring/test.properties" />
+		<property name="scope" value="micor-service-calendar-server" />
+		<property name="registyAddr" value="zookeeper://127.0.0.1:2181" />
 	</bean>
+	<!-- 
+	<bean id="kvClient" class="com.bricks.kvs.client.KVClientImpl">
+		<property name="scope" value="${appName}" />
+		<property name="registyAddr" value="${dubbo.registry.address}" />
+	</bean>
+	 -->
 
 	<dubbo:application logger="log4j" name="${appName}" />
 	<dubbo:registry address="${dubbo.registry.address}" />
 	<dubbo:protocol name="dubbo" port="${dubbo.port}" />
-
-	<bean id="kvClient" class="com.bricks.kvs.client.KVClientImpl" p:scope="${appName}" />
 
 	<bean class="com.bricks.core.schedule.SimpleScheduler" />
 	<bean class="com.bricks.core.SpringCtxHolder" />

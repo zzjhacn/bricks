@@ -7,16 +7,22 @@
 	<dubbo:application logger="log4j" name="micor-service-kvs-server" />
 	<dubbo:registry address="zookeeper://127.0.0.1:2181" />
 	<dubbo:protocol name="dubbo" port="20882" />
+	<!-- 
 	<dubbo:protocol name="http" port="8001" />
+	 -->
+	<dubbo:protocol name="webservice" port="9001" contextpath="ws" server="jetty" />
+	<dubbo:protocol name="hessian" port="9002" contextpath="hessian" server="jetty" />
 
 	<bean class="com.bricks.core.schedule.SimpleScheduler" />
 	<bean class="com.bricks.core.SpringCtxHolder" />
 	<bean class="com.bricks.core.redis.RedisService" p:addr="localhost" />
 
-	<bean id="kvStore" class="com.bricks.kvs.server.KVStoreImpl" />
+	<bean id="kvStore" class="com.bricks.kvs.server.KVStoreRedisImpl" />
 
+<!-- 
 	<dubbo:service protocol="http"  interface="com.bricks.kvs.KVStore" ref="kvStore" />
-	<dubbo:service protocol="dubbo" interface="com.bricks.kvs.KVStore" ref="kvStore" />
-	<dubbo:service protocol="dubbo"  interface="com.bricks.core.simpleservice.DubboBasedServiceServer" ref="kvStore" />
+ -->
+	<dubbo:service protocol="dubbo,webservice,hessian" interface="com.bricks.kvs.KVStore" ref="kvStore" />
+	<dubbo:service protocol="dubbo" interface="com.bricks.core.simpleservice.DubboBasedServiceServer" ref="kvStore" />
 
 </beans>
