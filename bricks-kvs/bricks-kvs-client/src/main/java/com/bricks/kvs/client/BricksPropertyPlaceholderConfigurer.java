@@ -1,13 +1,14 @@
 package com.bricks.kvs.client;
 
+import java.net.MalformedURLException;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 
-import com.bricks.core.dubbo.DubboReferHelper;
 import com.bricks.kvs.KVStore;
 import com.bricks.lang.log.LogAble;
+import com.caucho.hessian.client.HessianProxyFactory;
 
 /**
  * @author bricks <long1795@gmail.com>
@@ -16,8 +17,7 @@ public class BricksPropertyPlaceholderConfigurer extends PropertyPlaceholderConf
 
 	private KVStore kvStore;
 
-	private String scope;
-	private String registyAddr;
+	private String appName;
 
 	protected static final ConcurrentHashMap<String, String> cache = new ConcurrentHashMap<>();
 
@@ -31,12 +31,11 @@ public class BricksPropertyPlaceholderConfigurer extends PropertyPlaceholderConf
 		if (cache.containsKey(key)) {
 			return cache.get(key);
 		}
-		if (kvStore == null) {
-			kvStore = DubboReferHelper.refer(KVStore.class, registyAddr);
-		}
 		if (kvStore != null) {
-			String result = kvStore.get(scope, key);
-			cache.put(key, result);
+			String result = kvStore.get(appName, key);
+			if (result != null) {
+				cache.put(key, result);
+			}
 			return result;
 		}
 		return null;
@@ -57,11 +56,16 @@ public class BricksPropertyPlaceholderConfigurer extends PropertyPlaceholderConf
 		return result;
 	}
 
-	public void setScope(String scope) {
-		this.scope = scope;
+	public void setAppName(String appName) {
+		this.appName = appName;
 	}
 
-	public void setRegistyAddr(String registyAddr) {
-		this.registyAddr = registyAddr;
+	public void setKvStoreHessianAddr(String kvStoreHessianAddr) {
+		HessianProxyFactory hpf = new HessianProxyFactory();
+		try {
+			this.kvStore = (KVStore) hpf.create(KVStore.class, kvStoreHessianAddr);
+		} catch (MalformedURLException e) {
+			err(e);
+		}
 	}
 }

@@ -6,15 +6,9 @@
 
 	<bean class="com.bricks.kvs.client.BricksPropertyPlaceholderConfigurer" >
 		<property name="location" value="classpath:META-INF/spring/test.properties" />
-		<property name="scope" value="micor-service-calendar-server" />
-		<property name="registyAddr" value="zookeeper://127.0.0.1:2181" />
+		<property name="appName" value="micor-service-calendar-server" />
+		<property name="kvStoreHessianAddr" value="http://127.0.0.1:9002/hessian/com.bricks.kvs.KVStore" />
 	</bean>
-	<!-- 
-	<bean id="kvClient" class="com.bricks.kvs.client.KVClientImpl">
-		<property name="scope" value="${appName}" />
-		<property name="registyAddr" value="${dubbo.registry.address}" />
-	</bean>
-	 -->
 
 	<dubbo:application logger="log4j" name="${appName}" />
 	<dubbo:registry address="${dubbo.registry.address}" />

@@ -17,7 +17,7 @@ import com.bricks.lang.log.LogAble;
  */
 @Schedulable
 public class KVStoreRedisImpl implements KVStore, DubboBasedServiceServer, LogAble {
-	
+
 	@Resource
 	private RedisService redis;
 
@@ -28,7 +28,9 @@ public class KVStoreRedisImpl implements KVStore, DubboBasedServiceServer, LogAb
 	 */
 	@Override
 	public String get(String scope, String key) {
-		return redis.getJedis().get(scope + "-" + key);
+		String val = redis.getJedis().get(scope + "-" + key);
+		log().info("key[{}] of scope[{}] got. value=[{}].", key, scope, val);
+		return val;
 	}
 
 	@Schedulable(name = "refresh-kv-map-task")
