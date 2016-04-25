@@ -17,6 +17,8 @@ ext['javassist.version'] = '3.20.0-GA'
 ext{
 	version_dubbo = '2.8.4'//2.5.4-SNAPSHOT
 	version_thymeleaf = '2.1.4.RELEASE'//3.0.0.BETA02
+	version_cxf = '3.1.6'
+	version_hessian = '4.0.38'
 }
 buildscript {
 	repositories {
@@ -115,12 +117,13 @@ project(':bricks-core'){
 				'org.apache.httpcomponents:httpclient:4.1.2',
 				'javax.servlet:javax.servlet-api:3.1.0',
 				'org.mortbay.jetty:jetty:6.1.26',
-				'com.caucho:hessian:4.0.38',
-				'org.apache.cxf:cxf-rt-frontend-simple:3.1.6',//3.1.6
-				'org.apache.cxf:cxf-rt-transports-http:3.1.6'//2.6.1
+				"com.caucho:hessian:$version_hessian",
+				"org.apache.cxf:cxf-rt-frontend-simple:$version_cxf",//3.1.6
+				"org.apache.cxf:cxf-rt-transports-http:$version_cxf"//2.6.1
 		compile ("com.alibaba:dubbo:$version_dubbo"){
 			//exclude group:"org.javassist",module:"javassist"
 		}
+		//		providedCompile
 	}
 }
 project(':bricks-dal:bricks-dal-common'){
@@ -171,7 +174,6 @@ project(':bricks-facade'){
 				'org.springframework:spring-web',
 				'com.alibaba:druid:1.0.17',
 				'org.hsqldb:hsqldb:2.3.3',
-				'javax.servlet:javax.servlet-api:3.1.0',
 				'javax.servlet.jsp:jsp-api:2.2.1-b03',
 				'com.fasterxml.jackson.core:jackson-databind:2.5.3',
 				'com.thoughtworks.xstream:xstream:1.4.7'

@@ -10,6 +10,37 @@ import com.alibaba.fastjson.JSONObject;
 public class StringUtil {
 	private StringUtil() {}
 
+	public static String columnToProperty(String columnName) {
+		return columnToProperty(columnName, "");
+	}
+
+	public static String columnToProperty(String columnName, String prefix) {
+		if (prefix == null || "".equals(prefix.trim())) {
+			prefix = "";
+		}
+		if (!"".equals(prefix) && columnName.startsWith(prefix)) {
+			columnName = columnName.replaceFirst(prefix, "");
+		}
+		char spliter = '_';
+		StringBuilder sb = new StringBuilder(prefix);
+		int i = 0;
+		boolean flag = false;
+		for (char c : columnName.toCharArray()) {
+			if (c == spliter && i > 0) {
+				flag = true;
+				continue;
+			}
+			if (flag) {
+				sb.append(("" + c).toUpperCase());
+			} else {
+				sb.append(c);
+			}
+			flag = false;
+			i++;
+		}
+		return sb.toString();
+	}
+
 	public static String propertyToColumn(String propertyName) {
 		return propertyToColumn(propertyName, "");
 	}
