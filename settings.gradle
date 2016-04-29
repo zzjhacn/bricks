@@ -1,4 +1,4 @@
 rootProject.name = 'bricks'
 include 'bricks-lang', 'bricks-core', 'bricks-utils', 'bricks-helper', 'bricks-facade', 'bricks-dal:bricks-dal-common', 'bricks-dal:bricks-dal-mybatis'
-include 'bricks-calendar:bricks-calendar-client', 'bricks-calendar:bricks-calendar-server'
-include 'bricks-kvs:bricks-kvs-client', 'bricks-kvs:bricks-kvs-server'
+//include 'bricks-calendar:bricks-calendar-client', 'bricks-calendar:bricks-calendar-server'
+//include 'bricks-kvs:bricks-kvs-client', 'bricks-kvs:bricks-kvs-server'
