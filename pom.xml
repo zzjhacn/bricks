@@ -26,8 +26,11 @@
 	</modules>
 
 	<properties>
-		<version.spring-paltform>2.0.3.RELEASE</version.spring-paltform>
 		<javassist.version>3.20.0-GA</javassist.version>
+		<logback.version>1.1.7</logback.version>
+		<httpclient.version>4.5.2</httpclient.version>
+		<velocity.version>1.7</velocity.version>
+		<version.spring-paltform>2.0.3.RELEASE</version.spring-paltform>
 		<version.curator>2.9.0</version.curator>
 		<version.fastjson>1.2.8</version.fastjson>
 		<version.ali-druid>1.0.13</version.ali-druid>
@@ -97,6 +100,16 @@
 				<groupId>org.apache.curator</groupId>
 				<artifactId>curator-recipes</artifactId>
 				<version>${version.curator}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.httpcomponents</groupId>
+				<artifactId>fluent-hc</artifactId>
+				<version>${httpclient.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.velocity</groupId>
+				<artifactId>velocity</artifactId>
+				<version>${velocity.version}</version>
 			</dependency>
 			<!-- -->
 			<dependency>
@@ -209,7 +222,7 @@
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-core</artifactId>
-			<version>${version.logback}</version>
+			<version>${logback.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.aspectj</groupId>

@@ -17,6 +17,9 @@ import com.bricks.core.thread.LocalThreadFactory;
 import com.bricks.lang.log.LogAble;
 
 /**
+ * 基于spring的简单调度器（单节点调度，不支持分布式）<br/>
+ * 自动调度标记了 {@Schedulable} 的bean
+ * 
  * @author bricks <long1795@gmail.com>
  */
 public class SimpleScheduler implements LogAble, ApplicationContextAware {
@@ -25,13 +28,13 @@ public class SimpleScheduler implements LogAble, ApplicationContextAware {
 	void regist(String name, Runnable runnable, int interval, TimeUnit unit) {
 		synchronized (pool) {
 			pool.scheduleWithFixedDelay(() -> {
-				log().debug("Starting scheduled task[{}].", name);
+				log().info("Starting scheduled task[{}].", name);
 				try {
 					runnable.run();
 				} catch (Throwable t) {
 					err(t);
 				}
-				log().debug("Task[{}] scheduled completly.", name);
+				log().info("Task[{}] scheduled completly.", name);
 			} , 0, interval, unit);
 			log().info("Scheduler[{}] started with interval {} {}...", name, interval, unit);
 		}
@@ -70,7 +73,7 @@ public class SimpleScheduler implements LogAble, ApplicationContextAware {
 					regist(name, () -> {
 						try {
 							m.invoke(v);
-						} catch (Exception e) {
+						} catch (Throwable e) {
 							log().error("Error when invoking method : " + m.toString(), e);
 						}
 					} , interval, timeUnit);

@@ -1,33 +1,21 @@
 package com.bricks.helper.code.api.domain;
 
-import com.bricks.helper.code.CodeGenReq;
-import com.bricks.helper.code.CodeType;
+import com.bricks.helper.code.JavaClass;
 
 /**
  * @author bricks <long1795@gmail.com>
  */
-public class API extends CodeGenReq {
+public class API extends JavaClass {
 	private static final long serialVersionUID = 1L;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.bricks.helper.code.CodeGenReq#codeType()
-	 */
-	@Override
-	public CodeType codeType() {
-		return CodeType.API;
-	}
+	public API() {}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.bricks.helper.code.CodeGenReq#outputPath()
+	/**
+	 * @param pkg
+	 * @param clazzName
+	 * @param comment
 	 */
-	@Override
-	public String outputPath() {
-		// TODO Auto-generated method stub
-		return null;
+	public API(String pkg, String clazzName, String comment) {
+		super(pkg, clazzName, comment);
 	}
-
 }

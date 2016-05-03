@@ -10,6 +10,8 @@ import com.bricks.lang.log.LogAble;
 import com.bricks.utils.StringUtil;
 
 /**
+ * 方法调用日志（拦截器）
+ * 
  * @author bricks <long1795@gmail.com>
  */
 public class MethodLogger implements MethodInterceptor, LogAble {

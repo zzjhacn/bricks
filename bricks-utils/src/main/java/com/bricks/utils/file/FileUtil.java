@@ -5,11 +5,20 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 
 /**
+ * 文件助手类
+ * 
  * @author bricks <long1795@gmail.com>
  */
 public class FileUtil {
 	private FileUtil() {}
 
+	/**
+	 * 简单文件名过滤器（后缀过滤，不限于扩展名）
+	 * 
+	 * @param fileNameSuffix
+	 *            后缀过滤（不限于扩展名）
+	 * @return
+	 */
 	public static FilenameFilter simpleFileFilter(final String fileNameSuffix) {
 		return new FilenameFilter() {
 			@Override

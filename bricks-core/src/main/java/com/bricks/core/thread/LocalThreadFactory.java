@@ -4,6 +4,8 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
+ * 线程工厂（可命名，可计数）
+ * 
  * @author bricks <long1795@gmail.com>
  */
 public class LocalThreadFactory implements ThreadFactory {

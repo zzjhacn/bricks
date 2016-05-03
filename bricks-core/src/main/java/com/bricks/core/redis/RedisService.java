@@ -11,6 +11,8 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 /**
+ * redis 服务
+ * 
  * @author bricks <long1795@gmail.com>
  */
 public class RedisService implements LogAble {

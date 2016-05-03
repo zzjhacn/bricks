@@ -1,13 +1,19 @@
 package com.bricks.helper.code.api;
 
+import java.io.File;
+
+import org.apache.velocity.VelocityContext;
+
 import com.bricks.helper.code.CodeGenResp;
 import com.bricks.helper.code.CodeGenerator;
-import com.bricks.helper.code.api.domain.API;
+import com.bricks.helper.code.api.domain.APICodeGenReq;
+import com.bricks.utils.file.FileUtil;
+import com.bricks.utils.velocity.VelocityUtil;
 
 /**
  * @author bricks <long1795@gmail.com>
  */
-public class APICodeGenerator implements CodeGenerator<API> {
+public class APICodeGenerator implements CodeGenerator<APICodeGenReq> {
 
 	/*
 	 * (non-Javadoc)
@@ -15,9 +21,26 @@ public class APICodeGenerator implements CodeGenerator<API> {
 	 * @see com.bricks.helper.code.CodeGenerator#generate(com.bricks.helper.code.CodeGenReq)
 	 */
 	@Override
-	public CodeGenResp generate(API request) {
-		// TODO Auto-generated method stub
-		return null;
+	public CodeGenResp generate(APICodeGenReq request) {
+		final String tpath = request.codeType().getTemplatePath();
+		File f = new File(request.outputPath());
+		final String opath = f.getAbsolutePath();
+		CodeGenResp resp = new CodeGenResp();
+		resp.setSucc(true);
+		try {
+			request.getApis().forEach(a -> {
+				VelocityContext vc = new VelocityContext();
+				vc.put("req", a);
+				String path = parsePath(parsePath(opath) + a.getPkg());
+				FileUtil.mkdir(path);
+				VelocityUtil.write(vc, tpath + "template.java", path + a.getClazzName() + ".java");
+			});
+			resp.setFilePath(opath);
+		} catch (Throwable t) {
+			resp.setErrmsg(t.getMessage());
+			resp.setSucc(false);
+		}
+		return resp;
 	}
 
 }

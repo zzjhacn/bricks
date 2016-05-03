@@ -1,38 +1,36 @@
-package ${a.pkg};
+package ${req.pkg};
 
-import com.landaojia.base.utils.BaseObject;
-#foreach( ${import} in ${a.imports} )
-import ${import};
+import com.bricks.lang.BaseObject;
+#foreach( ${f} in ${req.imports} )
+import ${f};
 #end
-
 /**
- * ${a.classComment}
+ * ${req.comment}
  * 
  * @author Gray <b>long1795@gmail.com</b>
  */
-public class ${a.className} extends BaseObject {
+public class ${req.clazzName} extends BaseObject {
 	private static final long serialVersionUID = 1L;
+#foreach( ${f} in ${req.staticFields} )
 
-#foreach( ${f} in ${a.staticFields} )
 	/**
 	 * ${f.comment}
 	 */
 	public static final ${f.type} ${f.name};
-	
 #end
-#foreach( ${f} in ${a.fields} )
+#foreach( ${f} in ${req.fields} )
 
 	/**
 	 * ${f.comment}
 	 */
-	private ${f.type} ${f.name};//${f.comment}
+	${f.toString()}//${f.comment}
 #end
+#foreach( ${f} in ${req.fields} )
 
-#foreach( ${f} in ${a.fields} )
 	/**
 	 * @return ${f.comment}
 	 */
-	public ${f.type} get${f.getterAndSetterName}() {
+	public ${f.genericStr()} ${f.getterName()}() {
 		return ${f.name};
 	}
 
@@ -41,7 +39,7 @@ public class ${a.className} extends BaseObject {
 	 * @param ${f.name}
 	 *            ${f.comment}
 	 */
-	public void set${f.getterAndSetterName}(${f.type} ${f.name}) {
+	public void ${f.setterName()}(${f.genericStr()} ${f.name}) {
 		this.${f.name} = ${f.name};
 	}
 #end
