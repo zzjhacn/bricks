@@ -5,9 +5,9 @@ package com.bricks.helper.code;
  */
 public enum CodeType {
 	API("../template/api/"),  //
-	DAO("../dao/"),  //
-	WEBAPP("../webapp/"),  //
-	FSM("../stat/");
+	DAO("../template/dal/"),  //
+	WEBAPP("../template/webapp/"),  //
+	FSM("../template/stat/");
 
 	private String templatePath;
 

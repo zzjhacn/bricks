@@ -6,13 +6,21 @@ import java.util.Map;
 import com.bricks.lang.BaseObject;
 
 /**
+ * 事件
+ * 
  * @author bricks <long1795@gmail.com>
  */
 public class Event extends BaseObject {
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * 事件类型
+	 */
 	protected String eventType;
 
+	/**
+	 * 事件上下文
+	 */
 	protected Map<String, Object> eventContext;
 
 	public Event() {}

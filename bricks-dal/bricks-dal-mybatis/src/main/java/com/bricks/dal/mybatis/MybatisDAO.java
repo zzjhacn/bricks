@@ -57,12 +57,18 @@ public abstract class MybatisDAO<O extends BaseEO> extends StatementName impleme
 	@Resource
 	protected SqlSessionTemplate simpleTemplate;
 
-	protected Configuration cfg;
+	protected static Configuration cfg;
 	protected Class<Object> clazz;
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		cfg = sqlSessionFactory.getConfiguration();
+		if (cfg == null) {
+			synchronized (this) {
+				if (cfg == null) {
+					cfg = sqlSessionFactory.getConfiguration();
+				}
+			}
+		}
 		clazz = ReflectUtil.getSuperClassGenricType(getClass(), 0);
 		simpleExtension();
 	}

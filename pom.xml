@@ -26,8 +26,11 @@
 	</modules>
 
 	<properties>
-		<version.spring-paltform>2.0.3.RELEASE</version.spring-paltform>
 		<javassist.version>3.20.0-GA</javassist.version>
+		<logback.version>1.1.7</logback.version>
+		<httpclient.version>4.5.2</httpclient.version>
+		<velocity.version>1.7</velocity.version>
+		<version.spring-paltform>2.0.3.RELEASE</version.spring-paltform>
 		<version.curator>2.9.0</version.curator>
 		<version.fastjson>1.2.8</version.fastjson>
 		<version.ali-druid>1.0.13</version.ali-druid>
@@ -37,6 +40,7 @@
 		<version.mybatis>3.4.0</version.mybatis>
 		<version.mybatis-spring>1.3.0</version.mybatis-spring>
 		<version.oracle>10.2.0.4.0</version.oracle>
+		<version.mysql>6.0.2</version.mysql>
 		<version.jmail>1.4</version.jmail>
 		<version.jedis>2.8.1</version.jedis>
 		<version.jpos>2.0.2</version.jpos>
@@ -98,6 +102,16 @@
 				<artifactId>curator-recipes</artifactId>
 				<version>${version.curator}</version>
 			</dependency>
+			<dependency>
+				<groupId>org.apache.httpcomponents</groupId>
+				<artifactId>fluent-hc</artifactId>
+				<version>${httpclient.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.velocity</groupId>
+				<artifactId>velocity</artifactId>
+				<version>${velocity.version}</version>
+			</dependency>
 			<!-- -->
 			<dependency>
 				<groupId>com.alibaba</groupId>
@@ -145,6 +159,11 @@
 				<groupId>com.oracle</groupId>
 				<artifactId>ojdbc14</artifactId>
 				<version>${version.oracle}</version>
+			</dependency>
+			<dependency>
+				<groupId>mysql</groupId>
+				<artifactId>mysql-connector-java</artifactId>
+				<version>${version.mysql}</version>
 			</dependency>
 			<!-- -->
 			<dependency>
@@ -209,7 +228,7 @@
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-core</artifactId>
-			<version>${version.logback}</version>
+			<version>${logback.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.aspectj</groupId>

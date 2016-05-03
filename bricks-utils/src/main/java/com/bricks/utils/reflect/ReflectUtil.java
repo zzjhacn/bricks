@@ -4,6 +4,8 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 /**
+ * 反射助手类
+ * 
  * @author bricks <long1795@gmail.com>
  */
 public class ReflectUtil {

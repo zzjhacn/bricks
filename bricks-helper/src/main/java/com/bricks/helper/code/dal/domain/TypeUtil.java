@@ -15,10 +15,13 @@ public class TypeUtil {
 	static {
 		typeMap.put("varchar", String.class);
 		typeMap.put("varchar2", String.class);
+		typeMap.put("smallint", Integer.class);
 		typeMap.put("int", Integer.class);
+		typeMap.put("bigint", Long.class);
 		typeMap.put("integer", Long.class);
 		typeMap.put("date", java.sql.Date.class);
 		typeMap.put("datetime", Date.class);
+		typeMap.put("timestamp", Date.class);
 		typeMap.put("number", BigDecimal.class);
 	}
 

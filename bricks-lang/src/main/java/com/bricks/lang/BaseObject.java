@@ -8,6 +8,8 @@ import java.util.Collection;
 import java.util.UUID;
 
 /**
+ * 基类，增加对象标识，用于分布式系统中的对象跟踪
+ * 
  * @author bricks <long1795@gmail.com>
  */
 public class BaseObject implements Serializable {

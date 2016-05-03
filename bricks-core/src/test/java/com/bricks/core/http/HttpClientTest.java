@@ -4,7 +4,7 @@ import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.HttpCoreContext;
 import org.junit.Test;
@@ -18,7 +18,7 @@ public class HttpClientTest implements LogAble {
 
 	@Test
 	public void test() throws Exception {
-		HttpClient client = new DefaultHttpClient();
+		HttpClient client = HttpClientBuilder.create().build();
 		HttpHost host = new HttpHost("localhost", 8001);
 		HttpPost req = new HttpPost("/com.bricks.kvs.KVStore");
 		req.addHeader("method", "get");
