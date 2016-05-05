@@ -13,5 +13,6 @@
 	<modules>
 		<module>bricks-dal-common</module>
 		<module>bricks-dal-mybatis</module>
+		<module>bricks-dal-jpa</module>
 	</modules>
 </project>

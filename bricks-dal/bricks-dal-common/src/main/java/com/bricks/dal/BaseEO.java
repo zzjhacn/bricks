@@ -4,6 +4,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+
 import com.bricks.dal.ann.Cond;
 import com.bricks.dal.ann.Operator;
 import com.bricks.lang.BaseObject;
@@ -11,15 +17,18 @@ import com.bricks.lang.BaseObject;
 /**
  * @author bricks <long1795@gmail.com>
  */
+@MappedSuperclass
 public abstract class BaseEO extends BaseObject {
 	private static final long serialVersionUID = 1L;
 
-	private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	protected Long id;
 
 	@Cond(target = "id", operator = Operator.IN)
 	transient private List<Long> ids;
 
-	private Date createTime;
+	protected Date createTime;
 
 	@Cond(target = "createTime", operator = Operator.GTE)
 	transient private Date createTimeB;
@@ -27,7 +36,7 @@ public abstract class BaseEO extends BaseObject {
 	@Cond(target = "createTime", operator = Operator.LTE)
 	transient private Date createTimeE;
 
-	private Date updateTime;
+	protected Date updateTime;
 
 	@Cond(target = "updateTime", operator = Operator.GTE)
 	transient private Date updateTimeB;
@@ -35,7 +44,8 @@ public abstract class BaseEO extends BaseObject {
 	@Cond(target = "updateTime", operator = Operator.LTE)
 	transient private Date updateTimeE;
 
-	private Integer version;
+	@Column
+	protected Integer version;
 
 	public static Date getDate(int delta) {
 		Calendar c = Calendar.getInstance();
