@@ -76,8 +76,8 @@ subprojects {
 	}
 	install {
 		repositories.mavenInstaller {
-			pom.groupId = project.group
-			pom.artifactId = project.artifact
+		//	pom.groupId = project.group
+		//	pom.artifactId = project.artifact
 			pom.packaging = 'jar'
 		}
 	}

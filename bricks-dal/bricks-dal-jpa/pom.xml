@@ -6,12 +6,9 @@
 		<version>0.0.01-SNAPSHOT</version>
 	</parent>
 	<groupId>com.bricks.dal</groupId>
-	<artifactId>bricks-dal-common</artifactId>
-	<packaging>jar</packaging>
-	<name>${project.artifactId}-v${project.version}</name>
-
+	<artifactId>bricks-dal-jpa</artifactId>
 	<build>
-		<finalName>bricks-dal-common</finalName>
+		<finalName>bricks-dal-jpa</finalName>
 		<resources>
 			<resource>
 				<directory>src/main/java</directory>
@@ -28,15 +25,17 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.bricks</groupId>
-			<artifactId>bricks-core</artifactId>
+			<groupId>com.bricks.dal</groupId>
+			<artifactId>bricks-dal-common</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<!--
 		<dependency>
-			<groupId>javax</groupId>
-			<artifactId>javaee-api</artifactId>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
 		</dependency>
-		-->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+		</dependency>
 	</dependencies>
 </project>
