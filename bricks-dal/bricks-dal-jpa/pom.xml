@@ -37,6 +37,7 @@
 			<groupId>com.alibaba</groupId>
 			<artifactId>druid</artifactId>
 		</dependency>
+<<<<<<< HEAD
 		<!-- 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -47,5 +48,7 @@
 			<groupId>org.hsqldb</groupId>
 			<artifactId>hsqldb</artifactId>
 		</dependency>
+=======
+>>>>>>> origin/master
 	</dependencies>
 </project>

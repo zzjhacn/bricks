@@ -37,6 +37,7 @@
 			<groupId>javax</groupId>
 			<artifactId>javaee-api</artifactId>
 		</dependency>
+<<<<<<< HEAD
 		<dependency>
 			<groupId>javax.persistence</groupId>
 			<artifactId>persistence-api</artifactId>
@@ -46,5 +47,8 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
 		</dependency>
+=======
+		-->
+>>>>>>> origin/master
 	</dependencies>
 </project>
