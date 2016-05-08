@@ -4,18 +4,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Column;
-<<<<<<< HEAD
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-=======
-import javax.persistence.Embeddable;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
->>>>>>> origin/master
 
 import com.bricks.dal.ann.Cond;
 import com.bricks.dal.ann.Operator;
@@ -24,31 +16,18 @@ import com.bricks.lang.BaseObject;
 /**
  * @author bricks <long1795@gmail.com>
  */
-<<<<<<< HEAD
 @MappedSuperclass
-=======
-@Embeddable
->>>>>>> origin/master
 public abstract class BaseEO extends BaseObject {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-<<<<<<< HEAD
-	protected Long id;
-=======
 	private Long id;
->>>>>>> origin/master
 
 	@Cond(target = "id", operator = Operator.IN)
 	transient private List<Long> ids;
 
-<<<<<<< HEAD
-	protected Date createTime;
-=======
-	@Column(name = "create_time")
 	private Date createTime;
->>>>>>> origin/master
 
 	@Cond(target = "createTime", operator = Operator.GTE)
 	transient private Date createTimeB;
@@ -56,12 +35,7 @@ public abstract class BaseEO extends BaseObject {
 	@Cond(target = "createTime", operator = Operator.LTE)
 	transient private Date createTimeE;
 
-<<<<<<< HEAD
-	protected Date updateTime;
-=======
-	@Column(name = "update_time")
 	private Date updateTime;
->>>>>>> origin/master
 
 	@Cond(target = "updateTime", operator = Operator.GTE)
 	transient private Date updateTimeB;
@@ -69,12 +43,7 @@ public abstract class BaseEO extends BaseObject {
 	@Cond(target = "updateTime", operator = Operator.LTE)
 	transient private Date updateTimeE;
 
-	@Column
-<<<<<<< HEAD
-	protected Integer version;
-=======
 	private Integer version;
->>>>>>> origin/master
 
 	public static Date getDate(int delta) {
 		Calendar c = Calendar.getInstance();

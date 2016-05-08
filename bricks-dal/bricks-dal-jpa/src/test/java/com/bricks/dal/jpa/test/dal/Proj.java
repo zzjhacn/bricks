@@ -1,9 +1,5 @@
 package com.bricks.dal.jpa.test.dal;
 
-<<<<<<< HEAD
-=======
-import javax.persistence.Column;
->>>>>>> origin/master
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -17,15 +13,8 @@ import com.bricks.dal.BaseEO;
 public class Proj extends BaseEO {
 	private static final long serialVersionUID = 1L;
 
-<<<<<<< HEAD
 	private String projCode;// 项目标识
 
-=======
-	@Column
-	private String projCode;// 项目标识
-
-	@Column
->>>>>>> origin/master
 	private String projName;// 项目名
 
 	/**
