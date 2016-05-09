@@ -16,11 +16,7 @@
 		<level value="warn" />
 	</logger>
 	<root>
-<<<<<<< HEAD
 		<level value="info" />
-=======
-		<level value="debug" />
->>>>>>> origin/master
 		<appender-ref ref="STDOUT" />
 	</root>
 </log4j:configuration>

@@ -9,19 +9,13 @@
 
 	<tx:annotation-driven transaction-manager="transactionManager" />
 
-<<<<<<< HEAD
 	<jpa:repositories base-package="com.bricks.dal.jpa.test.dal" entity-manager-factory-ref="entityManagerFactory" transaction-manager-ref="transactionManager" />
-=======
-	<jpa:repositories base-package="com.bricks.dal.jpa.test.dal" repository-impl-postfix="Impl" entity-manager-factory-ref="entityManagerFactory"
-		transaction-manager-ref="transactionManager" />
->>>>>>> origin/master
 
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
 
 	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-<<<<<<< HEAD
 		<property name="dataSource" ref="dataSource" />
 		<property name="packagesToScan" value="com.bricks.dal.jpa.test.dal" />
 		<property name="persistenceProvider">
@@ -29,7 +23,7 @@
 		</property>
 		<property name="jpaVendorAdapter">
 			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
-				<property name="generateDdl" value="false" />
+				<property name="generateDdl" value="true" />
                 <!-- 
                 <property name="database" value="MYSQL"/>
                 <property name="databasePlatform" value="org.hibernate.dialect.MySQL5InnoDBDialect"/>
@@ -58,23 +52,6 @@
 		<property name="username" value="sa" />
 		<property name="password" value="" />
 		<property name="validationQuery" value="select 1 from INFORMATION_SCHEMA.SYSTEM_USERS" />
-=======
-		<property name="jpaVendorAdapter">
-			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
-				<property name="generateDdl" value="false" />
-				<property name="showSql" value="true" />
-				<property name="database" value="HSQL"/>
-			</bean>
-		</property>
-		<property name="dataSource" ref="dataSource" />
-	</bean>
-
-	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
-		<property name="url" value="jdbc:hsqldb:../db/hsqldb/data/data.dat" />
-		<property name="username" value="sa" />
-		<property name="password" value="" />
-		<property name="validationQuery" value="select 1 from INFORMATION_SCHEMA.SYSTEM_USERS"/>
->>>>>>> origin/master
 		<!--
 		<property name="initialSize" value="${dao.initialSize}" />
 		<property name="minIdle" value="${dao.minIdle}" />
@@ -82,10 +59,6 @@
 		<property name="maxActive" value="${dao.maxActive}" />
 		 -->
     	<!-- 开启Druid的监控统计功能 -->
-<<<<<<< HEAD
-		<property name="filters" value="stat" />
-=======
     	<property name="filters" value="stat" />
->>>>>>> origin/master
 	</bean>
 </beans>

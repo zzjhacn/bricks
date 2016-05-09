@@ -1,5 +1,7 @@
 package com.bricks.dal.jpa.test;
 
+import java.util.Date;
+
 import javax.annotation.Resource;
 
 import org.junit.Test;
@@ -8,6 +10,8 @@ import org.springframework.data.querydsl.QPageRequest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.bricks.dal.jpa.test.dal.Person;
+import com.bricks.dal.jpa.test.dal.PersonDao;
 import com.bricks.dal.jpa.test.dal.Proj;
 import com.bricks.dal.jpa.test.dal.ProjDao;
 import com.bricks.lang.log.LogAble;
@@ -20,6 +24,17 @@ import com.bricks.lang.log.LogAble;
 public class SpringDataJpaTest implements LogAble {
 	@Resource
 	ProjDao dao;
+
+	@Resource
+	PersonDao pdao;
+
+	@Test
+	public void test2() throws Exception {
+		Person p = new Person();
+		p.setBirthday(new Date());
+		p.setName("john");
+		pdao.save(p);
+	}
 
 	@Test
 	public void test() throws Exception {

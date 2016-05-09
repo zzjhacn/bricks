@@ -7,13 +7,14 @@ import org.springframework.data.repository.Repository;
 /**
  * @author bricks <long1795@gmail.com>
  */
-public interface ProjDao extends Repository<Proj, Long> {
+public interface PersonDao extends Repository<Person, Long> {
 
-	Proj save(Proj proj);
+	Person save(Person proj);
 
-	Proj findById(Long id);
+	Person findById(Long id);
 
-	Page<Proj> findByIdGreaterThan(Long id, Pageable pg);
+	Page<Person> findByIdGreaterThan(Long id, Pageable pg);
 
 	Long countByIdGreaterThan(Long id);
+
 }
