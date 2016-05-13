@@ -13,8 +13,10 @@ import redis.clients.jedis.JedisPoolConfig;
 /**
  * redis 服务
  * 
+ * @deprecated { @see spring-data-redis }
  * @author bricks <long1795@gmail.com>
  */
+@Deprecated
 public class RedisService implements LogAble {
 
 	@Value("${bricks.core.redis.addr}")

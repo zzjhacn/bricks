@@ -29,7 +29,8 @@ public class FileUtil {
 		return new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String name) {
-				return dir.getName().endsWith(fileNameSuffix) || name.endsWith(fileNameSuffix);
+//				return dir.getName().endsWith(fileNameSuffix) || name.endsWith(fileNameSuffix);
+				return name.endsWith(fileNameSuffix);
 			}
 		};
 	}
