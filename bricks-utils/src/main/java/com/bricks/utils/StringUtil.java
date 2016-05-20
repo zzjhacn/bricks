@@ -1,6 +1,8 @@
 package com.bricks.utils;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 
 import com.alibaba.fastjson.JSONObject;
 
@@ -122,6 +124,11 @@ public class StringUtil {
 			}
 		});
 		return sb.toString();
+	}
+
+	public static String format(String pattern, Date d) {
+		SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+		return sdf.format(d);
 	}
 
 	public static String format(String pattern, String... strings) {
