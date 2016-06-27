@@ -23,11 +23,11 @@ import com.bricks.lang.log.LogAble;
  * @author bricks <long1795@gmail.com>
  */
 public class SimpleScheduler implements LogAble, ApplicationContextAware {
-	final static ScheduledExecutorService pool = Executors.newScheduledThreadPool(10, new LocalThreadFactory("simple-schedule-thread-"));
+	final static ScheduledExecutorService POOL = Executors.newScheduledThreadPool(10, new LocalThreadFactory("simple-schedule-thread-"));
 
 	void regist(String name, Runnable runnable, int interval, TimeUnit unit) {
-		synchronized (pool) {
-			pool.scheduleWithFixedDelay(() -> {
+		synchronized (POOL) {
+			POOL.scheduleWithFixedDelay(() -> {
 				log().info("Starting scheduled task[{}].", name);
 				try {
 					runnable.run();
@@ -42,8 +42,8 @@ public class SimpleScheduler implements LogAble, ApplicationContextAware {
 
 	@PreDestroy
 	public void destory() {
-		log().warn("Shutingdown executors...[{}]", pool.toString());
-		pool.shutdown();
+		log().warn("Shutingdown executors...[{}]", POOL.toString());
+		POOL.shutdown();
 	}
 
 	/*

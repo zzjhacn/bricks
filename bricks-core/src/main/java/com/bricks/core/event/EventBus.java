@@ -13,11 +13,15 @@ import static com.bricks.lang.log.LogAble.slog;
  * 
  * @author bricks <long1795@gmail.com>
  */
-public class EventBus {
+public final class EventBus {
+
+	/**
+	 * 
+	 */
+	public final static ConcurrentHashMap<String, List<EventSubscriber>> REGISTER = new ConcurrentHashMap<>();
+
 	private EventBus() {}
-
-	public final static ConcurrentHashMap<String, List<EventSubscriber>> register = new ConcurrentHashMap<>();
-
+	
 	/**
 	 * 解除订阅
 	 * 
@@ -25,11 +29,11 @@ public class EventBus {
 	 * @param subscriberUid
 	 */
 	public static final void unsubscribe(final String eventType, final String subscriberUid) {
-		if (register.get(eventType) == null) {
+		if (REGISTER.get(eventType) == null) {
 			slog().warn("No subscribe exists for event type[{}].", eventType);
 			return;
 		}
-		Iterator<EventSubscriber> it = register.get(eventType).iterator();
+		Iterator<EventSubscriber> it = REGISTER.get(eventType).iterator();
 		while (it.hasNext()) {
 			if (subscriberUid.equals(it.next().get__id())) {
 				it.remove();
@@ -46,11 +50,11 @@ public class EventBus {
 	 * @param subscriber
 	 */
 	public static final void subscribe(final String eventType, final EventSubscriber subscriber) {
-		if (!register.containsKey(eventType)) {
-			register.put(eventType, new ArrayList<>());
+		if (!REGISTER.containsKey(eventType)) {
+			REGISTER.put(eventType, new ArrayList<>());
 		}
 		slog().info("Subscriber[{}] is listening for evnet[{}]", subscriber, eventType);
-		register.get(eventType).add(subscriber);
+		REGISTER.get(eventType).add(subscriber);
 	}
 
 	/**
@@ -60,8 +64,8 @@ public class EventBus {
 	 */
 	public static final void broadcast(final Event event) {
 		final ConcurrentMap<String, String> report = new ConcurrentHashMap<>();
-		if (register.containsKey(event.getEventType())) {
-			register.get(event.getEventType()).forEach(subscriber -> {
+		if (REGISTER.containsKey(event.getEventType())) {
+			REGISTER.get(event.getEventType()).forEach(subscriber -> {
 				boolean notify = false;
 				if (subscriber.isNotifyEachNode()) {
 					subscriber.handle(event);

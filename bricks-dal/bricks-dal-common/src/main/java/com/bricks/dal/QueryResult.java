@@ -47,7 +47,7 @@ public class QueryResult<T extends BaseEO> extends BaseObject {
 		return data;
 	}
 
-	public void setData(List<T> data) {
+	public final void setData(List<T> data) {
 		this.data = data;
 		if (data != null) {
 			this.size = data.size();

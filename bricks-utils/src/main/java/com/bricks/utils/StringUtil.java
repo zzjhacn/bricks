@@ -11,7 +11,7 @@ import com.alibaba.fastjson.JSONObject;
  * 
  * @author bricks <long1795@gmail.com>
  */
-public class StringUtil {
+public final class StringUtil {
 	private StringUtil() {}
 
 	/**
@@ -22,7 +22,7 @@ public class StringUtil {
 	 *            （数据库）列名
 	 * @return （java类）属性名
 	 */
-	public static String columnToProperty(String columnName) {
+	public static String columnToProperty(final String columnName) {
 		return columnToProperty(columnName, null);
 	}
 
@@ -30,24 +30,21 @@ public class StringUtil {
 	 * （数据库）列名转换为（java类）属性名<br/>
 	 * 下划线命名法转换为驼峰命名法
 	 * 
-	 * @param columnName
+	 * @param nColumnName
 	 *            （数据库）列名
-	 * @param prefix
+	 * @param nPrefix
 	 *            （数据库）列名前缀
 	 * @return （java类）属性名
 	 */
-	public static String columnToProperty(String columnName, String prefix) {
-		if (prefix == null || "".equals(prefix.trim())) {
-			prefix = "";
-		}
-		if (!"".equals(prefix) && columnName.startsWith(prefix)) {
-			columnName = columnName.replaceFirst(prefix, "");
-		}
+	public static String columnToProperty(final String columnName, final String prefix) {
+		final String nPrefix = prefix == null || "".equals(prefix.trim()) ? "" : prefix;
+		final String nColumnName = !"".equals(nPrefix) && columnName.startsWith(nPrefix) ? columnName.replaceFirst(nPrefix, "") : columnName;
+
 		char spliter = '_';
 		StringBuilder sb = new StringBuilder();
 		int i = 0;
 		boolean flag = false;
-		for (char c : columnName.toCharArray()) {
+		for (char c : nColumnName.toCharArray()) {
 			if (c == spliter && i >= 0) {
 				flag = true;
 				continue;
@@ -86,7 +83,7 @@ public class StringUtil {
 	 * @return （数据库）列名
 	 */
 	public static String propertyToColumn(String propertyName, String prefix) {
-		String spliter = "_";
+		final String spliter = "_";
 		if (prefix == null || "".equals(prefix.trim())) {
 			prefix = "";
 		}

@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * @author bricks <long1795@gmail.com>
  */
-public class CollectionUtil {
+public final class CollectionUtil {
 	private CollectionUtil() {}
 
 	public static <T> List<T> removeDup(List<T> lst) {

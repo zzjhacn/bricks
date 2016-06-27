@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
  */
 public interface LogAble {
 
-	static Map<String, Logger> loggers = new ConcurrentHashMap<String, Logger>();
+	static Map<String, Logger> LOGGER = new ConcurrentHashMap<String, Logger>();
 
 	public static Logger slog() {
 		String clazz = Thread.currentThread().getStackTrace()[2].getClassName();
@@ -22,10 +22,10 @@ public interface LogAble {
 	}
 
 	static Logger getLogger(String name) {
-		if (!loggers.containsKey(name)) {
-			loggers.put(name, LoggerFactory.getLogger(name));
+		if (!LOGGER.containsKey(name)) {
+			LOGGER.put(name, LoggerFactory.getLogger(name));
 		}
-		return loggers.get(name);
+		return LOGGER.get(name);
 	}
 
 	default Logger log() {

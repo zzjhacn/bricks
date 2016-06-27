@@ -9,7 +9,7 @@ import java.io.IOException;
  * 
  * @author bricks <long1795@gmail.com>
  */
-public class FileUtil {
+public final class FileUtil {
 
 	/**
 	 * 缺省的路径分隔符 : "/"

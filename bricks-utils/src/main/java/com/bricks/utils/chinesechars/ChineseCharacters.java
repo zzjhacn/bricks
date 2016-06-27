@@ -8,7 +8,7 @@ import java.util.concurrent.Executors;
 /**
  * @author bricks <long1795@gmail.com>
  */
-public class ChineseCharacters {
+public final class ChineseCharacters {
 	private ChineseCharacters() {}
 
 	static String chars = "";

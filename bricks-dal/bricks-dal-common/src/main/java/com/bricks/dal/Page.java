@@ -8,7 +8,7 @@ import com.bricks.lang.BaseObject;
 public class Page extends BaseObject {
 	private static final long serialVersionUID = 1L;
 
-	public static int DEFAULT_PAGE_SIZE = 20;
+	public final static int DEFAULT_PAGE_SIZE = 20;
 
 	private int pageSize = DEFAULT_PAGE_SIZE;
 

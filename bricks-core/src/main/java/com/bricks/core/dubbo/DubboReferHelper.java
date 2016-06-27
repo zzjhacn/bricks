@@ -10,11 +10,11 @@ import com.alibaba.dubbo.rpc.ProxyFactory;
  * 
  * @author bricks <long1795@gmail.com>
  */
-public class DubboReferHelper {
+public final class DubboReferHelper {
 	private DubboReferHelper() {}
 
-	final static Protocol protocol = ExtensionLoader.getExtensionLoader(Protocol.class).getAdaptiveExtension();
-	final static ProxyFactory proxy = ExtensionLoader.getExtensionLoader(ProxyFactory.class).getAdaptiveExtension();
+	private final static Protocol PROTOCOL = ExtensionLoader.getExtensionLoader(Protocol.class).getAdaptiveExtension();
+	private final static ProxyFactory PROXY = ExtensionLoader.getExtensionLoader(ProxyFactory.class).getAdaptiveExtension();
 
 	/**
 	 * 基于当前运行环境，产生远程引用代理
@@ -26,6 +26,6 @@ public class DubboReferHelper {
 	 * @return 目标代理
 	 */
 	public static <T> T refer(Class<T> clazz, String registyAddr) {
-		return proxy.getProxy(protocol.refer(clazz, URL.valueOf(registyAddr)));
+		return PROXY.getProxy(PROTOCOL.refer(clazz, URL.valueOf(registyAddr)));
 	}
 }

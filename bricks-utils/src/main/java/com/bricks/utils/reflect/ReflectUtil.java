@@ -8,7 +8,7 @@ import java.lang.reflect.Type;
  * 
  * @author bricks <long1795@gmail.com>
  */
-public class ReflectUtil {
+public final class ReflectUtil {
 	private ReflectUtil() {}
 
 	@SuppressWarnings("unchecked")

@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author bricks <long1795@gmail.com>
  */
-public class TypeUtil {
+public final class TypeUtil {
 	private TypeUtil() {}
 
 	private static ConcurrentHashMap<String, Class<?>> typeMap = new ConcurrentHashMap<>();
