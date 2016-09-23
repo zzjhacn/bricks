@@ -24,7 +24,7 @@ public class APICodeGeneratorTest implements LogAble {
 
 	@Test
 	public void test() throws Exception {
-		Assert.assertEquals("d:/a/a/", FileUtil.parsePath("d:\\a.a"));
+		Assert.assertEquals("d:/artifactId/artifactId/", FileUtil.parsePath("d:\\artifactId.a"));
 
 		API api = new API("com.bricks.helper.test.code.api", "TestApi", "代码生成测试");
 		api.addField(new JavaField(String.class, "name", "NAME", "\"tom\""));

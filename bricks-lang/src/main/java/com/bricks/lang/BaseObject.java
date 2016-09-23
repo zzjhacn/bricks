@@ -7,6 +7,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.UUID;
 
+import com.google.gson.GsonBuilder;
+
 /**
  * 基类，增加对象标识，用于分布式系统中的对象跟踪
  * 
@@ -22,6 +24,9 @@ public class BaseObject implements Serializable {
 	}
 
 	public String toString() {
+		return  new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").create().toJson(this);
+	}
+	public String toString2() {
 		StringBuilder sb = new StringBuilder();
 		Class<?> c = getClass();
 		while (!c.getName().equals(Object.class.getName())) {
