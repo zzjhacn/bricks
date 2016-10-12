@@ -24,8 +24,9 @@ public class BaseObject implements Serializable {
 	}
 
 	public String toString() {
-		return  new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").create().toJson(this);
+		return new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").create().toJson(this);
 	}
+
 	public String toString2() {
 		StringBuilder sb = new StringBuilder();
 		Class<?> c = getClass();

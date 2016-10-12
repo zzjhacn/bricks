@@ -3,6 +3,7 @@ package com.bricks.utils.test.file;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -91,7 +92,11 @@ public class MvnChainGenerator implements LogAble {
 	}
 
 	void report() {
-		projects.forEach((n, p) -> {
+		List<String> ps = new ArrayList<>();
+		ps.addAll(projects.keySet());
+		Collections.sort(ps);
+		ps.forEach(s -> {
+			P p = projects.get(s);
 			if (p.parent == null) {
 				// print(p, 0);
 				System.out.println("\t<ol  class='dd-list'>");
